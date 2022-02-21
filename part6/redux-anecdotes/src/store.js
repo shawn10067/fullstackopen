@@ -8,7 +8,20 @@ const anecdotesAtStart = [
   "Premature optimization is the root of all evil.",
   "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
 ];
+const asObject = (anecdote) => {
+  return {
+    content: anecdote,
+    id: getId(),
+    votes: 0,
+  };
+};
+
+const initialState = anecdotesAtStart.map(asObject);
+
+let store;
 
 let state = configureStore({
   reducer,
 });
+
+export default store;
