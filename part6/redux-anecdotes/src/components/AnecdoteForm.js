@@ -1,20 +1,15 @@
 import { useDispatch } from "react-redux";
-import { newAnec } from "../reducers/anecdoteReducer";
-import { setMessage, removeMessage } from "../reducers/notificationReducer";
-
-let timeoutId = 0;
+import { addAnecdote } from "../reducers/anecdoteReducer";
+import { createMessage } from "../reducers/notificationReducer";
 
 const AnecdoteList = () => {
   const dispatch = useDispatch();
 
-  const anec = (event) => {
+  const anec = async (event) => {
     event.preventDefault();
-    clearTimeout(timeoutId);
-    dispatch(newAnec(event.target.noteContent.value));
-    dispatch(setMessage(`Added: ${event.target.noteContent.value}`));
-    timeoutId = setTimeout(() => {
-      dispatch(removeMessage());
-    }, 2000);
+    dispatch(addAnecdote(event.target.noteContent.value));
+    dispatch(createMessage(`Added: ${event.target.noteContent.value}`, 5));
+    event.target.noteContent.value = "";
   };
   return (
     <div>

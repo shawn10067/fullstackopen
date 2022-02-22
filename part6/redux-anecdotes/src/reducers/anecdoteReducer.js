@@ -1,7 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import { addAnec, getAnec, likeAnec } from "../services/dbFetcher";
 
 const getId = () => (100000 * Math.random()).toFixed(0);
 
+/*
 const anecdotesAtStart = [
   "If it hurts, do it more often",
   "Adding manpower to a late software project makes it later!",
@@ -19,10 +22,10 @@ const asObject = (anecdote) => {
 };
 
 const initialState = anecdotesAtStart.map(asObject);
-
+*/
 const anecdoteSlice = createSlice({
   name: "anecdotes",
-  initialState: initialState,
+  initialState: [],
   reducers: {
     vote(state, action) {
       const id = action.payload;
@@ -61,8 +64,49 @@ const anecdoteSlice = createSlice({
       newState.push(newNote);
       return newState;
     },
+    setAnec(state, action) {
+      return action.payload.sort((a, b) => {
+        if (a.votes < b.votes) {
+          return 1;
+        }
+        return -1;
+      });
+    },
+    appendAnec(state, action) {
+      let newState = state.sort((a, b) => {
+        if (a.votes < b.votes) {
+          return 1;
+        }
+        return -1;
+      });
+      newState.push(action.payload);
+      return newState;
+    },
   },
 });
 
-export const { vote, newAnec } = anecdoteSlice.actions;
+export const { vote, newAnec, setAnec, appendAnec } = anecdoteSlice.actions;
+
+export const addAnecdote = (content) => {
+  return async (dispatch) => {
+    let newAnecdote = await addAnec(content);
+    dispatch(appendAnec(newAnecdote));
+  };
+};
+
+export const getAnnecdotes = () => {
+  return async (dispatch) => {
+    let anecs = await getAnec();
+
+    dispatch(setAnec(anecs));
+  };
+};
+
+export const voteAnnecdote = (id, content, likes) => {
+  return async (dispatch) => {
+    let newAnnec = await likeAnec(id, content, likes);
+    dispatch(vote(id));
+  };
+};
+
 export default anecdoteSlice.reducer;
