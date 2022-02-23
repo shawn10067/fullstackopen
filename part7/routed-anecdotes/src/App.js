@@ -31,16 +31,24 @@ const AnecdoteList = ({ anecdotes }) => (
     <h2>Anecdotes</h2>
     <ul>
       {anecdotes.map((anecdote) => (
-        <li key={anecdote.id}>{anecdote.content}</li>
+        <Link key={anecdote.id} to={`/${anecdote.id}`}>
+          <li key={anecdote.id}>{anecdote.content}</li>
+        </Link>
       ))}
     </ul>
   </div>
 );
 
 const Anecdote = ({ anecdote }) => {
-  <div>
-    <h1></h1>
-  </div>;
+  if (!anecdote) {
+    return <h2>No such anecdote</h2>;
+  }
+  return (
+    <div>
+      <h2>Anecdote {anecdote.id}</h2>
+      <p>{anecdote.content}</p>
+    </div>
+  );
 };
 
 const About = () => (
@@ -143,6 +151,12 @@ const App = () => {
     },
   ]);
 
+  const match = useMatch("/:id");
+  let anec;
+  if (match) {
+    anec = anecdotes.find((val) => val.id === Number(match.params.id));
+  }
+
   const [notification, setNotification] = useState("");
 
   const addNew = (anecdote) => {
@@ -164,17 +178,17 @@ const App = () => {
   };
 
   return (
-    <Router>
+    <div>
       <h1>Software anecdotes</h1>
       <Menu />
       <Routes>
-        <Route path="/:id" element={<Anecdote notes={notes} />} />
+        <Route path="/:id" element={<Anecdote anecdote={anec} />} />
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path="/about" element={<About />} />
         <Route path="/create" element={<CreateNew addNew={addNew} />} />
       </Routes>
       <Footer />
-    </Router>
+    </div>
   );
 };
 
