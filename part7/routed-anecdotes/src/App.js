@@ -5,6 +5,7 @@ import {
   Routes,
   Link,
   useMatch,
+  useNavigate,
 } from "react-router-dom";
 
 const Menu = () => {
@@ -84,6 +85,13 @@ const Footer = () => (
   </div>
 );
 
+const Notification = ({ message }) => {
+  const notiStyle = {
+    border: "5px solid red",
+  };
+  return <div style={notiStyle}>{message}</div>;
+};
+
 const CreateNew = (props) => {
   const [content, setContent] = useState("");
   const [author, setAuthor] = useState("");
@@ -134,6 +142,8 @@ const CreateNew = (props) => {
 };
 
 const App = () => {
+  const navigate = useNavigate();
+
   const [anecdotes, setAnecdotes] = useState([
     {
       content: "If it hurts, do it more often",
@@ -151,15 +161,26 @@ const App = () => {
     },
   ]);
 
+  const [noti, setNoti] = useState("");
+
   const match = useMatch("/:id");
   let anec;
   if (match) {
     anec = anecdotes.find((val) => val.id === Number(match.params.id));
   }
 
+  const createNoti = (message) => {
+    setNoti(message);
+    setTimeout(() => {
+      setNoti("");
+    }, 5000);
+  };
+
   const [notification, setNotification] = useState("");
 
   const addNew = (anecdote) => {
+    createNoti(anecdote.content);
+    navigate("/");
     anecdote.id = (Math.random() * 10000).toFixed(0);
     setAnecdotes(anecdotes.concat(anecdote));
   };
@@ -168,7 +189,6 @@ const App = () => {
 
   const vote = (id) => {
     const anecdote = anecdoteById(id);
-
     const voted = {
       ...anecdote,
       votes: anecdote.votes + 1,
@@ -181,6 +201,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Notification message={noti} />
       <Routes>
         <Route path="/:id" element={<Anecdote anecdote={anec} />} />
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
