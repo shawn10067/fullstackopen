@@ -1,0 +1,31 @@
+{
+  "name": "bloglist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=production nodemon index.js",
+    "test": "NODE_ENV=test jest --verbose --run-in-band",
+    "start:test": "NODE_ENV=test node index.js"
+  },
+  "author": "Sheen L",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^27.4.7",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.1.7",
+    "mongoose-unique-validator": "^2.0.1"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
