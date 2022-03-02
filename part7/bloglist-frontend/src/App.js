@@ -1,118 +1,49 @@
-import React, { useState, useEffect } from "react";
-import BlogBlock from "./components/BlogBlock";
-import { setToken, getAll, postBlog } from "./services/blogs";
-import { loginService } from "./services/login";
-import BlogForm from "./components/BlogForm";
-import LoginForm from "./components/LoginForm";
-import ToggleAble from "./components/ToggleAble";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "./reducers/userReducer";
+
+import BlogHome from "./BlogHome";
+import UserDiv from "./User";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [user, setUser] = useState({});
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const getNewBlogs = async () => {
-    getAll().then((blogs) => {
-      let newBlogs = blogs.sort((a, b) => {
-        if (a.likes < b.likes) {
-          return 1;
-        } else {
-          return -1;
-        }
-      });
-      setBlogs(newBlogs);
-    });
-  };
-
-  useEffect(() => {
-    getNewBlogs();
-  }, []);
-
-  useEffect(() => {
-    const storedUser = window.localStorage.getItem("user");
-    if (storedUser) {
-      console.log(storedUser);
-      setUser(JSON.parse(storedUser));
-      setToken(JSON.parse(storedUser).token);
-    }
-  }, []);
-
+  let user = useSelector((state) => state.userReducer);
+  const dispatch = useDispatch();
   const logoutFunc = () => {
     window.localStorage.removeItem("user");
-    setUser({});
+    dispatch(setUser({}));
   };
-
-  const submitFunction = async (event) => {
-    event.preventDefault();
-    try {
-      let reply = await loginService({
-        userName: username,
-        password,
-      });
-
-      console.log(reply);
-
-      setUser(reply);
-      setToken(reply.token);
-      setUsername("");
-      setPassword("");
-      window.localStorage.setItem("user", JSON.stringify(reply));
-    } catch (e) {
-      console.log("error with login", e.message);
-    }
+  const padding = {
+    padding: 5,
+    margin: 5,
   };
-
-  const blogSubmit = async (blogObj) => {
-    await postBlog(blogObj);
-    let getResp = await getAll();
-    setBlogs(getResp);
-  };
-
-  const divBorder = {
-    border: "3px dotted lightblue",
-    margin: "5px",
-    padding: "10px",
-  };
-
   return (
-    <div>
-      {user.userName ? (
-        <div>
-          <h2>blogs</h2>
-          <p>
+    <Router>
+      <div>
+        <Link style={padding} to="/">
+          home
+        </Link>
+        <Link style={padding} to="/users">
+          users
+        </Link>
+
+        {user.userName ? (
+          <span>
             {user.userName} is logged in{" "}
             <button onClick={logoutFunc} className="logoutBTN">
               log out
             </button>
-          </p>
+          </span>
+        ) : (
+          "please log in"
+        )}
+      </div>
 
-          <ToggleAble showName="Submit Blog" hideName="cancel">
-            <BlogForm blogSubmit={blogSubmit} />
-          </ToggleAble>
-          <br></br>
-
-          {blogs.map((blog) => (
-            <div key={blog.id} style={divBorder}>
-              <BlogBlock
-                blog={blog}
-                showName="show"
-                hideName="hide"
-                blogUpdater={getNewBlogs}
-              />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <LoginForm
-          username={username}
-          password={password}
-          setUsername={({ target }) => setUsername(target.value)}
-          setPassword={({ target }) => setPassword(target.value)}
-          submitFunction={submitFunction}
-        />
-      )}
-    </div>
+      <Routes>
+        <Route path="/users" element={<UserDiv />} />
+        <Route path="/" element={<BlogHome />} />
+      </Routes>
+    </Router>
   );
 };
 
