@@ -24,7 +24,7 @@ const UserDiv = () => {
   }, []);
   let blogs = useSelector((state) => state.blogReducer);
   if (blogs) {
-    console.log(blogs);
+    //console.log(blogs);
     blogs = blogs
       .reduce((a, b) => {
         let userIndex = a.findIndex((val) => val.id === b.user.id);
@@ -33,23 +33,24 @@ const UserDiv = () => {
           return a.concat({
             username: b.user.userName,
             id: b.user.id,
-            posts: 1,
+            posts: [b],
           });
         }
         a[userIndex] = {
           ...a[userIndex],
-          posts: a[userIndex].posts + 1,
+          posts: a[userIndex].posts.concat(b),
         };
         return a;
       }, [])
       .map((obj) => {
         return (
           <div key={obj.id}>
-            {obj.username} has {obj.posts} posts
+            {obj.username}
+            {obj.posts}
           </div>
         );
       });
-    //console.log(blogs);
+    console.log(blogs);
   }
   return (
     <div>

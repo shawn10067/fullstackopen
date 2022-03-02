@@ -20,8 +20,7 @@
     "build": "react-scripts build",
     "test": "jest .",
     "eject": "react-scripts eject",
-    "eslint": "eslint",
-    "cypress:open": "cypress open"
+    "eslint": "eslint"
   },
   "eslintConfig": {
     "extends": [
@@ -48,8 +47,6 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^12.6.3",
-    "cypress": "^9.4.1",
-    "cyprus": "^2.0.2",
     "react-test-renderer": "^17.0.2"
   }
 }
