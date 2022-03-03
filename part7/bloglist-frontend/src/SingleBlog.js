@@ -15,10 +15,6 @@ const SingleBlog = () => {
   let blog = useSelector((state) => state.blogReducer).find(
     (val) => val.id === id
   );
-  console.log(
-    id,
-    useSelector((state) => state.blogReducer)
-  );
   const getNewBlogs = async () => {
     getAll().then((blogs) => {
       let newBlogs = blogs.sort((a, b) => {

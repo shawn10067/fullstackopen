@@ -8,7 +8,9 @@ const Blog = ({ blog, blogUpdater, likeFunction }) => {
   const likeBlog = (e) => {
     e.preventDefault();
     setLikes(likes + 1);
-    putBlog(blog.id, { likes: likes + 1 }).catch(() => setLikes(likes - 1));
+    putBlog(blog.id, { likes: likes + 1, comments: [] }).catch(() =>
+      setLikes(likes - 1)
+    );
   };
 
   const deleteHandler = async (e) => {
