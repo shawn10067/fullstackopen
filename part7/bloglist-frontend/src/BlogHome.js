@@ -9,6 +9,7 @@ import { setBlogs } from "./reducers/blogReducer";
 import { setUser } from "./reducers/userReducer";
 import { useSelector, useDispatch } from "react-redux";
 import { setNotification } from "./reducers/notiReducer";
+import { ListGroup } from "react-bootstrap";
 
 const BlogHome = () => {
   let blogs = useSelector((state) => state.blogReducer);
@@ -71,11 +72,12 @@ const BlogHome = () => {
     dispatch(setBlogs(getResp));
   };
 
+  /*
   const divBorder = {
     border: "3px dotted lightblue",
     margin: "5px",
     padding: "10px",
-  };
+  }; */
 
   return (
     <div>
@@ -98,14 +100,14 @@ const BlogHome = () => {
           <br></br>
 
           {blogs.map((blog) => (
-            <div key={blog.id} style={divBorder}>
+            <ListGroup key={blog.id}>
               <BlogBlock
                 blog={blog}
                 showName="show"
                 hideName="hide"
                 blogUpdater={getNewBlogs}
               />
-            </div>
+            </ListGroup>
           ))}
         </div>
       ) : (

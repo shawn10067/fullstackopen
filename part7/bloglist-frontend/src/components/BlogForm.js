@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button } from "react-bootstrap";
 
 const BlogForm = ({ blogSubmit }) => {
   const [title, setTitle] = useState("");
@@ -49,13 +50,13 @@ const BlogForm = ({ blogSubmit }) => {
           className="urlBox"
         ></input>
       </p>
-      <button
+      <Button
         type="submit"
         data-testid="submitButton"
         className="blogSubmitButton"
       >
         Create
-      </button>
+      </Button>
     </form>
   );
 };

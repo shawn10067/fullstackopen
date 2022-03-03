@@ -34,6 +34,19 @@ const putBlog = (blogId, updatedBlog) => {
   });
 };
 
+const commentBlog = (blogId, comments) => {
+  const requestHeaders = {
+    headers: { Authorization: token },
+  };
+
+  const newUrl = `${baseUrl}/${blogId}/comments`;
+
+  const request = axios.put(newUrl, { comments }, requestHeaders);
+  return request.then((response) => {
+    return response.data;
+  });
+};
+
 const deleteBlog = (blogId) => {
   const requestHeaders = {
     headers: { Authorization: token },
@@ -45,4 +58,4 @@ const deleteBlog = (blogId) => {
   return request.then((response) => response.data);
 };
 
-export { getAll, setToken, postBlog, putBlog, deleteBlog };
+export { getAll, setToken, postBlog, putBlog, deleteBlog, commentBlog };

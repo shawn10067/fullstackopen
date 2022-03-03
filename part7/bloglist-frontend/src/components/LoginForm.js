@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "react-bootstrap";
 
 const LoginForm = ({
   username,
@@ -27,9 +28,9 @@ const LoginForm = ({
             ></input>
           </label>
         </p>
-        <button type="Submit" className="loginBTN">
+        <Button type="Submit" className="loginBTN">
           Login
-        </button>
+        </Button>
       </form>
     </div>
   );

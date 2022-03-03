@@ -1,12 +1,14 @@
 import React from "react";
+import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { getAll } from "./services/blogs";
 import { useEffect } from "react";
 import { setBlogs } from "./reducers/blogReducer";
-import { getAll } from "./services/blogs";
-import { Link } from "react-router-dom";
-
-const UserDiv = () => {
+const User = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
+
+  // getting all blogs and then sorting them
   const getNewBlogs = async () => {
     getAll().then((blogs) => {
       let newBlogs = blogs.sort((a, b) => {
@@ -23,47 +25,31 @@ const UserDiv = () => {
   useEffect(() => {
     getNewBlogs();
   }, []);
-  let blogs = useSelector((state) => state.blogReducer);
-  if (blogs) {
-    console.log(blogs);
-    blogs = blogs
-      .reduce((a, b) => {
-        let userIndex = a.findIndex((val) => val.id === b.user.id);
 
-        if (userIndex === -1) {
-          return a.concat({
-            username: b.user.userName,
-            id: b.user.id,
-            posts: [b],
-          });
-        }
-        a[userIndex] = {
-          ...a[userIndex],
-          posts: a[userIndex].posts.concat(b),
-        };
-        return a;
-      }, [])
-      .map((obj) => {
-        return (
-          <div key={obj.id}>
-            <h3>{obj.username}</h3>
-            {obj.posts.map((val) => {
-              return (
-                <li key={val.id}>
-                  <Link to={`/blogs/${val.id}`}>{val.title}</Link>
-                </li>
-              );
-            })}
-          </div>
-        );
-      });
+  // getting the blogs in the store
+  let blogs = useSelector((state) => state.blogReducer);
+
+  let userName = "";
+
+  // grouping blogs on users
+  if (blogs && blogs.length !== 0) {
+    console.log(blogs, id);
+    blogs = blogs.filter((val) => val.user.id === id);
+    userName = blogs[0].user.userName;
+    blogs = blogs.map((val, i) => {
+      return (
+        <li key={i}>
+          <Link to={`/blogs/${val.id}`}>{val.title}</Link>
+        </li>
+      );
+    });
   }
   return (
     <div>
-      <h2>Users</h2>
+      <h3>{userName}</h3>
       <ul>{blogs}</ul>
     </div>
   );
 };
 
-export default UserDiv;
+export default User;

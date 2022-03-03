@@ -2,10 +2,12 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "./reducers/userReducer";
+import { Button } from "react-bootstrap";
 
 import BlogHome from "./BlogHome";
-import UserDiv from "./User";
+import UserDivs from "./Users";
 import SingleBlog from "./SingleBlog";
+import User from "./User";
 
 const App = () => {
   let user = useSelector((state) => state.userReducer);
@@ -19,33 +21,40 @@ const App = () => {
     margin: 5,
   };
   return (
-    <Router>
-      <div>
-        <Link style={padding} to="/">
-          home
-        </Link>
-        <Link style={padding} to="/users">
-          users
-        </Link>
+    <div className="container">
+      <Router>
+        <div>
+          <Link style={padding} to="/">
+            home
+          </Link>
+          <Link style={padding} to="/users">
+            users
+          </Link>
 
-        {user.userName ? (
-          <span>
-            {user.userName} is logged in{" "}
-            <button onClick={logoutFunc} className="logoutBTN">
-              log out
-            </button>
-          </span>
-        ) : (
-          "please log in"
-        )}
-      </div>
+          {user.userName ? (
+            <span>
+              {user.userName} is logged in{" "}
+              <Button
+                variant="outline-primary"
+                onClick={logoutFunc}
+                className="logoutBTN"
+              >
+                log out
+              </Button>
+            </span>
+          ) : (
+            "please log in"
+          )}
+        </div>
 
-      <Routes>
-        <Route path="/users" element={<UserDiv />} />
-        <Route path="/" element={<BlogHome />} />
-        <Route path="/blogs/:id" element={<SingleBlog />} />
-      </Routes>
-    </Router>
+        <Routes>
+          <Route path="/users" element={<UserDivs />} />
+          <Route path="/" element={<BlogHome />} />
+          <Route path="/blogs/:id" element={<SingleBlog />} />
+          <Route path="/users/:id" element={<User />} />
+        </Routes>
+      </Router>
+    </div>
   );
 };
 

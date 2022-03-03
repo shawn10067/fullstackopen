@@ -97,4 +97,36 @@ blogRouter.put("/api/blogs/:id", async (request, response, next) => {
   response.status(204).send("hello").end();
 });
 
+blogRouter.put("/api/blogs/:id/comments", async (request, response, next) => {
+  const user = request.user;
+
+  if (!user) {
+    return response
+      .status(404)
+      .json({ error: "Invalid user credentials" })
+      .end();
+  }
+
+  let blogFound = await Blog.findById(request.params.id);
+
+  if (!blogFound) {
+    return response.status(404).json({ error: "Can't find your blog" }).end();
+  }
+
+  if (
+    Object.keys(request.body).length !== 1 &&
+    Object.keys(request.body)[0] !== comments
+  ) {
+    return response.status(400).json({ error: "Invalid credentials" }).end();
+  }
+
+  let updateBlogRes = await Blog.findByIdAndUpdate(
+    request.params.id,
+    request.body
+  );
+
+  console.log(updateBlogRes);
+  response.status(204).send("hello").end();
+});
+
 module.exports = blogRouter;

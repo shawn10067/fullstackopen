@@ -5,9 +5,19 @@ import Blog from "./components/Blog";
 import { getAll } from "./services/blogs";
 import { useDispatch } from "react-redux";
 import { setBlogs } from "./reducers/blogReducer";
+import { setUser } from "./reducers/userReducer";
+import { setToken } from "./services/blogs";
 
 const SingleBlog = () => {
   let dispatch = useDispatch();
+  useEffect(() => {
+    const storedUser = window.localStorage.getItem("user");
+    if (storedUser) {
+      console.log(storedUser);
+      dispatch(setUser(JSON.parse(storedUser)));
+      setToken(JSON.parse(storedUser).token);
+    }
+  }, []);
   useEffect(() => {
     getAll().then((blogs) => dispatch(setBlogs(blogs)));
   }, [dispatch]);

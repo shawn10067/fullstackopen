@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { deleteBlog, putBlog } from "../services/blogs";
+import { deleteBlog, putBlog, commentBlog } from "../services/blogs";
 import PropTypes from "prop-types";
+import { Button } from "react-bootstrap";
 
 const Blog = ({ blog, blogUpdater, likeFunction }) => {
   let [likes, setLikes] = useState(blog.likes);
@@ -19,9 +20,7 @@ const Blog = ({ blog, blogUpdater, likeFunction }) => {
   const addComment = (e) => {
     e.preventDefault();
     setBlogComments(blogComments.concat(e.target.commentText.value));
-    putBlog(blog.id, {
-      comments: blogComments.concat(e.target.commentText.value),
-    })
+    commentBlog(blog.id, blogComments.concat(e.target.commentText.value))
       .then(() => {
         blogUpdater();
         e.target.commentText.value = "";
@@ -55,9 +54,13 @@ const Blog = ({ blog, blogUpdater, likeFunction }) => {
         {blog.url}
         <br></br>
         Likes: <span className="likeSpan">{likes}</span>{" "}
-        <button onClick={likeFunction || likeBlog} className="clickButton">
+        <Button
+          size="sm"
+          onClick={likeFunction || likeBlog}
+          className="clickButton"
+        >
           like
-        </button>
+        </Button>
         <br></br>
         {blog.user.userName}
       </p>
@@ -68,10 +71,12 @@ const Blog = ({ blog, blogUpdater, likeFunction }) => {
         ))}
       </ul>
       <form onSubmit={addComment}>
-        <input type={"text"} name="commentText"></input>
-        <button type="submit">submit</button>
+        <input type={"text"} name="commentText"></input>{" "}
+        <Button type="submit">submit</Button>
       </form>
-      <button onClick={deleteHandler}>delete</button>
+      <Button variant="secondary" onClick={deleteHandler}>
+        delete
+      </Button>
     </div>
   );
 };
