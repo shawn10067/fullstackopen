@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { setBlogs } from "./reducers/blogReducer";
 import { getAll } from "./services/blogs";
+import { Link } from "react-router-dom";
 
 const UserDiv = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const UserDiv = () => {
   }, []);
   let blogs = useSelector((state) => state.blogReducer);
   if (blogs) {
-    //console.log(blogs);
+    console.log(blogs);
     blogs = blogs
       .reduce((a, b) => {
         let userIndex = a.findIndex((val) => val.id === b.user.id);
@@ -45,17 +46,22 @@ const UserDiv = () => {
       .map((obj) => {
         return (
           <div key={obj.id}>
-            {obj.username}
-            {obj.posts}
+            <h3>{obj.username}</h3>
+            {obj.posts.map((val) => {
+              return (
+                <li key={val.id}>
+                  <Link to={`/blogs/${val.id}`}>{val.title}</Link>
+                </li>
+              );
+            })}
           </div>
         );
       });
-    console.log(blogs);
   }
   return (
     <div>
       <h2>Users</h2>
-      {blogs}
+      <ul>{blogs}</ul>
     </div>
   );
 };

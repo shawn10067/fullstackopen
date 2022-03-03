@@ -5,6 +5,7 @@ import { setUser } from "./reducers/userReducer";
 
 import BlogHome from "./BlogHome";
 import UserDiv from "./User";
+import SingleBlog from "./SingleBlog";
 
 const App = () => {
   let user = useSelector((state) => state.userReducer);
@@ -42,6 +43,7 @@ const App = () => {
       <Routes>
         <Route path="/users" element={<UserDiv />} />
         <Route path="/" element={<BlogHome />} />
+        <Route path="/blogs/:id" element={<SingleBlog />} />
       </Routes>
     </Router>
   );
