@@ -38,6 +38,10 @@ blogRouter.post("/api/blogs", async (request, response, next) => {
     body.likes = 0;
   }
 
+  if (!body.comments) {
+    body.comments = [];
+  }
+
   const token = request.token;
 
   if (!token.id) {
