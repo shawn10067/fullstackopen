@@ -15,6 +15,8 @@ const User = require("./models/User");
 const mongoose = require("mongoose");
 const mongoURL =
   "mongodb+srv://shawn10067:Wowow123@cluster0.5jgpy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+
+// mongoose connection
 mongoose
   .connect(mongoURL)
   .then(() => console.log("connected to server"))
@@ -80,12 +82,6 @@ const resolvers = {
     },
     allBooks: async (root, args) => {
       let returnBooks = await Book.find({}).populate("author");
-      /*
-      returnBooks = returnBooks.map(async (book) => {
-        await book.populate("author");
-        return book;
-      });
-      */
 
       if (args.author) {
         returnBooks = returnBooks.filter(
