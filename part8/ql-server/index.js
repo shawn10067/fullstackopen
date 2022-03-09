@@ -1,5 +1,16 @@
-const { ApolloServer, gql } = require("apollo-server");
+// apollo spec
+const { ApolloServer, gql, UserInputError } = require("apollo-server");
+
+// tokenization spec
 const { nanoid } = require("nanoid");
+const jwt = require("jsonwebtoken");
+const secret = "MoreLife";
+
+// model imports
+const Book = require("./models/Book");
+const Author = require("./models/Author");
+
+// mongoose spec
 const mongoose = require("mongoose");
 const mongoURL =
   "mongodb+srv://shawn10067:Wowow123@cluster0.5jgpy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
@@ -10,6 +21,16 @@ mongoose
   .catch((error) => console.log("error from connecting", error));
 
 const typeDefs = gql`
+  type User {
+    username: String!
+    favoriteGenre: String!
+    id: ID!
+  }
+
+  type Token {
+    value: String!
+  }
+
   type Book {
     title: String!
     published: Int!
@@ -30,25 +51,37 @@ const typeDefs = gql`
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
+
+    me: User
   }
 
   type Mutation {
     addBook(
-      title: String
-      author: Author!
+      title: String!
+      author: String!
       published: Int!
       genres: [String!]!
     ): Book!
     editAuthor(name: String!, setBornTo: Int!): Author
+
+    createUser(username: String!, favoriteGenre: String!): User
+    login(username: String!, password: String!): Token
   }
 `;
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
-      let returnBooks = books;
+    bookCount: async () => {
+      let result = await Book.find({});
+      return result.length;
+    },
+    authorCount: async () => {
+      let result = await Author.find({});
+      return result.length;
+    },
+    allBooks: async (root, args) => {
+      let returnBooks = await Book.find({});
+      /*
       if (args.author) {
         returnBooks = returnBooks.filter((val) => val.author === args.author);
       }
@@ -57,53 +90,74 @@ const resolvers = {
           val.genres.includes(args.genre)
         );
       }
-      return returnBooks;
+      */
+      return returnBooks.map((book) => book.populate("author"));
     },
-    allAuthors: () => authors,
+    allAuthors: async () => await Author.find({}),
   },
   Author: {
     bookCount: (root) => {
+      /*
       return books.reduce((returnVal, element) => {
         if (element.author === root.name) {
           return returnVal + 1;
         }
         return returnVal;
       }, 0);
+      */
+      return 1;
     },
   },
   Mutation: {
-    addBook: (root, { title, author, published, genres }) => {
-      let newAuthor = {
-        name: author,
-        born: null,
-        id: nanoid(),
-      };
-      let newBook = {
+    addBook: async (root, { title, author, published, genres }) => {
+      // finding possible author in DB
+      let newAuthor = await Author.findOne({ name: author });
+
+      // if it is a new author
+      if (!newAuthor) {
+        try {
+          newAuthor = new Author({
+            name: author,
+            born: null,
+            id: nanoid(),
+          });
+          await newAuthor.save();
+        } catch (error) {
+          throw new UserInputError(error.message);
+        }
+      }
+
+      // creating the new book
+      let newBook = new Book({
         title,
         published,
-        author,
+        author: newAuthor,
         id: nanoid(),
         genres,
-      };
+      });
 
-      const foundAuthor = authors.find((val) => val.name === author);
-      if (!foundAuthor) {
-        //console.log("did not find", author);
-        authors.push(newAuthor);
+      try {
+        await newBook.save();
+      } catch (error) {
+        throw new UserInputError("Invalid book title Sir");
       }
-      books.push(newBook);
       return newBook;
     },
-    editAuthor: (root, { name, setBornTo }) => {
-      let foundAuthorIndex = authors.findIndex((val) => val.name === name);
-      if (foundAuthorIndex === -1) {
-        console.log(name, foundAuthorIndex);
+    editAuthor: async (root, { name, setBornTo }) => {
+      let foundAuthor = await Author.findOne({ name: name });
+      if (!foundAuthor) {
+        console.log(name, foundAuthor);
         return null;
       }
 
-      authors[foundAuthorIndex].born = setBornTo;
+      try {
+        foundAuthor.born = setBornTo;
+        await foundAuthor.save();
+      } catch (error) {
+        throw new UserInputError("Invalid age");
+      }
 
-      return authors[foundAuthorIndex];
+      return foundAuthor;
     },
   },
 };
@@ -111,6 +165,7 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  /* finish a user extractor here for the login part */
 });
 
 server.listen().then(({ url }) => {
