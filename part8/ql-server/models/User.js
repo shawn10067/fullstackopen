@@ -7,6 +7,7 @@ const schema = new mongoose.Schema({
     minlength: 3,
   },
   favGenre: String,
+  id: String,
 });
 
 module.exports = mongoose.model("User", schema);

@@ -9,17 +9,18 @@ const secret = "MoreLife";
 // model imports
 const Book = require("./models/Book");
 const Author = require("./models/Author");
+const User = require("./models/User");
 
 // mongoose spec
 const mongoose = require("mongoose");
 const mongoURL =
   "mongodb+srv://shawn10067:Wowow123@cluster0.5jgpy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-
 mongoose
   .connect(mongoURL)
   .then(() => console.log("connected to server"))
   .catch((error) => console.log("error from connecting", error));
 
+// type definitions
 const typeDefs = gql`
   type User {
     username: String!
@@ -158,6 +159,43 @@ const resolvers = {
       }
 
       return foundAuthor;
+    },
+    createUser: async (root, { username, favGenre }) => {
+      try {
+        const newUser = User({
+          username,
+          favGenre,
+          id: nanoid(),
+        });
+
+        // if we already have a user
+        const userExists = await User.exists({ username: username });
+        if (userExists) {
+          return null;
+        }
+
+        // saving the user and returning the token
+        await newUser.save();
+        return newUser;
+      } catch (error) {
+        throw new UserInputError("Invalid Username");
+      }
+    },
+    login: async (root, { username, password }) => {
+      try {
+        // if there is no user
+        const user = await User.findOne({ username: username });
+        if (!user || password !== "password123") {
+          return null;
+        }
+
+        // returns a token
+        return {
+          value: jwt.sign(user, secret),
+        };
+      } catch (error) {
+        throw new UserInputError("Invalid credentials");
+      }
     },
   },
 };
