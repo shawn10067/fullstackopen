@@ -14,7 +14,7 @@ const Authors = (props) => {
   });
   useEffect(() => {
     if (!result.loading) {
-      console.log(result.data);
+      //console.log(result.data);
       setAuthors(result.data.allAuthors);
     }
   }, [result.loading, result.data]);
@@ -28,7 +28,7 @@ const Authors = (props) => {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event.target.authorBorn.value);
+    //console.log(event.target.authorBorn.value);
     const born = Number(event.target.authorBorn.value);
     changeAuthorBorn({
       variables: {
