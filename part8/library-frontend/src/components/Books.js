@@ -4,6 +4,8 @@ import { getBooks } from "../queries.js";
 
 const Books = (props) => {
   const [books, setBooks] = useState([]);
+  const [genre, setGenre] = useState("all");
+  const [allGenres, setAllGenres] = useState([]);
   let result = useQuery(getBooks, {
     pollInterval: 2000,
   });
