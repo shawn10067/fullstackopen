@@ -3,6 +3,7 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import { LoginView } from "./components/Login";
+import ReccomendedView from "./components/ReccomendedView";
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -24,6 +25,9 @@ const App = () => {
           <button onClick={() => setPage("add")}>add book</button>
         ) : null}
         {token ? (
+          <button onClick={() => setPage("reccomended")}>reccomended</button>
+        ) : null}
+        {token ? (
           <button onClick={logoutHandler}>logout</button>
         ) : (
           <button onClick={() => setPage("login")}>login</button>
@@ -41,6 +45,8 @@ const App = () => {
         show={page === "login"}
         setPage={setPage}
       />
+
+      <ReccomendedView show={page === "reccomended"}></ReccomendedView>
     </div>
   );
 };

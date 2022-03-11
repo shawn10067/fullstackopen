@@ -89,17 +89,22 @@ const resolvers = {
         );
       }
       if (args.genre) {
+        console.log("mf wanted the genre", args.genre);
         returnBooks = returnBooks.filter((val) =>
           val.genres.includes(args.genre)
         );
       }
 
-      console.log(returnBooks);
+      //console.log(returnBooks);
 
       return returnBooks;
     },
     allAuthors: async () => await Author.find({}),
     me: (root, args, context) => {
+      console.log(
+        "The user requested the owner status of",
+        context.currentUser
+      );
       return context.currentUser;
     },
   },
@@ -150,7 +155,7 @@ const resolvers = {
     editAuthor: async (root, { name, setBornTo }) => {
       let foundAuthor = await Author.findOne({ name: name });
       if (!foundAuthor) {
-        console.log(name, foundAuthor);
+        //console.log(name, foundAuthor);
         return null;
       }
 

@@ -10,7 +10,7 @@ const Authors = (props) => {
   const [selectedUser, setSelectedUser] = useState("");
   const [changeAuthorBorn] = useMutation(editAuthorMutation);
   let result = useQuery(getAuthors, {
-    pollInterval: 2000,
+    pollInterval: 10000,
   });
   useEffect(() => {
     if (!result.loading) {
