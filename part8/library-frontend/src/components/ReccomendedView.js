@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { getUser, getBooksGenre } from "../queries";
 
@@ -6,34 +6,38 @@ const ReccomendedView = (props) => {
   const [favBooks, setFavBooks] = useState([]);
   const [favGenre, setFavGenre] = useState("");
 
-  // getting genre
-  let genreQueryResult = useQuery(getUser);
-  useEffect(() => {
-    console.log("hello");
-    if (!genreQueryResult.loading) {
-      console.log("DOING GENGRE");
-      console.log("data", genreQueryResult.data.me);
-      /*
-      const genre = genreQueryResult.data.me.favouriteGenre;
-      setFavGenre(genre);
-      console.log(genre);
-      */
-    }
-  }, [genreQueryResult.data]);
+  // declaring book getting query
+  let [getBooks, result] = useLazyQuery(getBooksGenre);
 
-  // getting books
-  let result = useQuery(getBooksGenre, {
-    variables: {
-      genre: favGenre,
-    },
-  });
+  //loading getting genre
+  let userQuery = useQuery(getUser);
+  useEffect(() => {
+    if (!userQuery.loading && userQuery.data) {
+      //console.log("loading", userQuery);
+
+      const genre = userQuery.data.me.favoriteGenre;
+      //console.log("my data", userQuery.data.me);
+      console.log("my genre", genre);
+      setFavGenre(genre);
+      console.log("genre", genre, "fav genre", favGenre);
+
+      console.log("sending getbooks with");
+      getBooks({
+        variables: {
+          genre,
+        },
+      });
+    }
+  }, [userQuery.data]);
+
+  // if we see a change in data
   useEffect(() => {
     if (result.data) {
       const books = result.data.allBooks;
       setFavBooks(books);
-      console.log(books);
+      console.log("fav books", books);
     }
-  }, [result.data]);
+  }, [result.data, favGenre]);
 
   if (!props.show) {
     return null;

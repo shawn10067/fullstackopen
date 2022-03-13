@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import { getBooks, getBooksGenre } from "../queries.js";
 
 const Books = (props) => {
@@ -7,6 +7,9 @@ const Books = (props) => {
   const [genre, setGenre] = useState("all");
   const [allGenres, setAllGenres] = useState([]);
   const [genreBooks, setGenreBooks] = useState([]);
+
+  // queires
+  let [genreQueryResultLazy, genreLazyResult] = useLazyQuery(getBooks);
 
   let genreQueryResult = useQuery(getBooksGenre, {
     variables: {
@@ -22,9 +25,7 @@ const Books = (props) => {
   }, [genreQueryResult.data, genre]);
 
   // getting the books
-  let result = useQuery(getBooks, {
-    pollInterval: 5000,
-  });
+  let result = useQuery(getBooks);
 
   // if we have data, then we set the books accordingly
   useEffect(() => {
@@ -87,6 +88,11 @@ const Books = (props) => {
               onClick={(event) => {
                 event.preventDefault();
                 setGenre(event.target.textContent);
+                genreQueryResultLazy({
+                  variables: {
+                    genre,
+                  },
+                });
                 console.log(event.target.textContent);
               }}
             >
