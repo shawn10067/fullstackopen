@@ -6,7 +6,7 @@ export const LoginView = ({ setToken, show, setPage }) => {
   // mutation function and the result object
   const [login, result] = useMutation(loginMutation, {
     onError: (error) => {
-      console.error(error.message);
+      console.error("Login error", error.message);
     },
   });
 

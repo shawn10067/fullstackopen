@@ -4,10 +4,48 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import { LoginView } from "./components/Login";
 import ReccomendedView from "./components/ReccomendedView";
+import { getAuthors, getBooks } from "./queries";
+
+import { gql, useSubscription, useApolloClient } from "@apollo/client";
+
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      title
+      author {
+        name
+        born
+        bookCount
+        id
+      }
+      published
+      genres
+    }
+  }
+`;
 
 const App = () => {
   const [page, setPage] = useState("authors");
   const [token, setToken] = useState("");
+  const client = useApolloClient();
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      console.log("SUB DATA", subscriptionData);
+      //window.alert(subscriptionData.data.bookAdded.title, "was added.");
+
+      client.cache.updateQuery({ query: getBooks }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(subscriptionData.data.bookAdded),
+        };
+      });
+      client.cache.updateQuery({ query: getAuthors }, ({ allAuthors }) => {
+        return {
+          allAuthors: allAuthors.concat(subscriptionData.data.bookAdded.author),
+        };
+      });
+    },
+  });
 
   const logoutHandler = (event) => {
     event.preventDefault();
