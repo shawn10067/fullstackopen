@@ -8,6 +8,36 @@ interface excersizeReturn {
   average: number;
 }
 
+interface argReturnArray {
+  workout: Array<number>;
+  target: number;
+}
+
+const parseArgument = (proc: Array<string>): argReturnArray => {
+  // destructuring the array
+  const [location, command, ...inputs] = proc;
+
+  // if there are not enough inputs
+  if (inputs.length < 2) {
+    throw new Error("not enough arguments");
+  }
+
+  // if not every element is a number
+  if (!inputs.every((val) => !isNaN(Number(val)))) {
+    throw new Error("some elements are not numbers");
+  }
+
+  // getting values
+  const workout: Array<number> = inputs.slice(1).map((val) => Number(val));
+  const target: number = Number(inputs[0]);
+
+  // returning the values
+  return {
+    workout,
+    target,
+  };
+};
+
 const calculateExcersize = (
   workout: Array<number>,
   target: number
@@ -47,4 +77,12 @@ const calculateExcersize = (
   };
 };
 
-console.log(calculateExcersize([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const { workout, target } = parseArgument(process.argv);
+  console.log(calculateExcersize(workout, target));
+} catch (e) {
+  console.log("Something went wrong:");
+  if (e instanceof Error) {
+    console.log("error:", e.message);
+  }
+}

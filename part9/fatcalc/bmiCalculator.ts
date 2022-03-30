@@ -1,7 +1,3 @@
-// Getting the argument
-const arg1 = process.argv[2];
-const arg2 = process.argv[3];
-
 // Defining the interface
 interface argReturn {
   one: number;
@@ -9,9 +5,27 @@ interface argReturn {
 }
 
 // Parsing the values
-const parseArguement = (firstArg: string, secondArg: string): argReturn {
-    
-}
+const parseArguement = (firstArg: string, secondArg: string): argReturn => {
+  // if there's not enough arguments
+  if (process.argv.length !== 4) {
+    throw new Error("not enough arguments");
+  }
+
+  // assigning number counterparts
+  const firstNum: number = Number(firstArg);
+  const secondNum: number = Number(secondArg);
+
+  // if the numbers aren't valid
+  if (isNaN(firstNum) || isNaN(secondNum)) {
+    throw new Error("Not numbers");
+  }
+
+  // returning the arguments
+  return {
+    one: firstNum,
+    two: secondNum,
+  };
+};
 
 // Actual value
 const calculateBMI = (height: number, weight: number): string => {
@@ -31,4 +45,19 @@ const calculateBMI = (height: number, weight: number): string => {
   }
 };
 
-console.log(calculateBMI(183, 100));
+try {
+  // Getting the argument
+  const arg1 = process.argv[2];
+  const arg2 = process.argv[3];
+
+  // getting the parsed info
+  const { one, two } = parseArguement(arg1, arg2);
+  console.log(one, two);
+  // printing the output
+  console.log(calculateBMI(one, two));
+} catch (e) {
+  console.log("Something went wrong");
+  if (e instanceof Error) {
+    console.log("Error", e.message);
+  }
+}
