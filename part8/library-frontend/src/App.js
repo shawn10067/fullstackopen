@@ -40,8 +40,19 @@ const App = () => {
         };
       });
       client.cache.updateQuery({ query: getAuthors }, ({ allAuthors }) => {
+        const subAuthor = subscriptionData.data.bookAdded.author;
+        const updatedAuthors = allAuthors.map((val) => {
+          if (val.name === subAuthor.name) {
+            const newBookCount = val.bookCount + 1;
+            return {
+              ...val,
+              bookCount: newBookCount,
+            };
+          }
+          return val;
+        });
         return {
-          allAuthors: allAuthors.concat(subscriptionData.data.bookAdded.author),
+          allAuthors: updatedAuthors,
         };
       });
     },

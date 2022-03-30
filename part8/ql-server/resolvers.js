@@ -69,9 +69,8 @@ const resolvers = {
         }
       } else {
         try {
-          await Author.findByIdAndUpdate({
-            bookCount: newAuthor.bookCount + 1,
-          });
+          newAuthor.bookCount += 1;
+          await newAuthor.save();
         } catch (e) {
           console.error("error occured:", e.message);
         }
