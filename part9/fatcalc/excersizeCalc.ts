@@ -13,9 +13,9 @@ interface argReturnArray {
   target: number;
 }
 
-const parseArgument = (proc: Array<string>): argReturnArray => {
+export const parseArgumentArray = (proc: Array<string>): argReturnArray => {
   // destructuring the array
-  const [location, command, ...inputs] = proc;
+  const [_location, _command, ...inputs] = proc;
 
   // if there are not enough inputs
   if (inputs.length < 2) {
@@ -38,7 +38,7 @@ const parseArgument = (proc: Array<string>): argReturnArray => {
   };
 };
 
-const calculateExcersize = (
+export const calculateExcersize = (
   workout: Array<number>,
   target: number
 ): excersizeReturn => {
@@ -78,7 +78,7 @@ const calculateExcersize = (
 };
 
 try {
-  const { workout, target } = parseArgument(process.argv);
+  const { workout, target } = parseArgumentArray(process.argv);
   console.log(calculateExcersize(workout, target));
 } catch (e) {
   console.log("Something went wrong:");

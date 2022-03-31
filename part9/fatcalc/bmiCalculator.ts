@@ -5,12 +5,10 @@ interface argReturn {
 }
 
 // Parsing the values
-const parseArguement = (firstArg: string, secondArg: string): argReturn => {
-  // if there's not enough arguments
-  if (process.argv.length !== 4) {
-    throw new Error("not enough arguments");
-  }
-
+export const parseArguement = (
+  firstArg: string,
+  secondArg: string
+): argReturn => {
   // assigning number counterparts
   const firstNum: number = Number(firstArg);
   const secondNum: number = Number(secondArg);
@@ -28,7 +26,7 @@ const parseArguement = (firstArg: string, secondArg: string): argReturn => {
 };
 
 // Actual value
-const calculateBMI = (height: number, weight: number): string => {
+export const calculateBMI = (height: number, weight: number): string => {
   // declaring metres and calculating BMI
   const metres: number = height / 100;
   const BMI = weight / Math.pow(metres, 2);
