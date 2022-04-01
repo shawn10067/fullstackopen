@@ -60,7 +60,7 @@ const App = () => {
   };
 
   //  content
-  const Content = ({ courses }: { courses: Array<CourseAttributes> }) => {
+  const Content = ({ courses }: { courses: Array<CoursePartBase> }) => {
     const mappedCourses = courses.map((val) => {
       return (
         <p>
@@ -77,7 +77,7 @@ const App = () => {
   };
 
   // total
-  const Total = ({ courses }: { courses: Array<CourseAttributes> }) => {
+  const Total = ({ courses }: { courses: Array<CoursePartBase> }) => {
     return (
       <p>
         Number of exercises{" "}
@@ -88,7 +88,6 @@ const App = () => {
 
   return (
     <div>
-      <Header title={courseName} />
       <Content courses={courseParts} />
       <Total courses={courseParts} />
     </div>
