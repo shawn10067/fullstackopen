@@ -47,6 +47,7 @@ const patientData = [
 const patientEntries: PatientData[] = patientData.map((val) => {
   let newVal = toNewPatientData(val) as PatientData;
   newVal.id = val.id;
+  newVal.entries = [];
   return newVal;
 });
 

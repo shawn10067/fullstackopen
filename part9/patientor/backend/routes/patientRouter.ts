@@ -8,6 +8,13 @@ patientRouter.get("/", (_req, res) => {
   return res.json(data).end();
 });
 
+patientRouter.get("/id/:id", (req, res) => {
+  const num: String = req.params.id;
+  console.log("tried to get", num);
+  const data = patientService.getOnePatientData(num);
+  return res.json(data).end();
+});
+
 patientRouter.post("/", (req, res) => {
   /* eslint-disable @typescript-eslint/no-unsafe-assignment */
   try {

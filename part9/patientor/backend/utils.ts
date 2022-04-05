@@ -43,6 +43,7 @@ type Fields = {
   ssn: unknown;
   gender: unknown;
   occupation: unknown;
+  entries: unknown;
 };
 
 export const toNewPatientData = ({
@@ -58,6 +59,7 @@ export const toNewPatientData = ({
     ssn: parseString(ssn),
     gender: parseGender(gender),
     occupation: parseString(occupation),
+    entries: [],
   };
   return newPatient;
 };
