@@ -43,7 +43,6 @@ type Fields = {
   ssn: unknown;
   gender: unknown;
   occupation: unknown;
-  entries: unknown;
 };
 
 export const toNewPatientData = ({
