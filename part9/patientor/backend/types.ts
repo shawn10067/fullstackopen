@@ -3,6 +3,12 @@ export enum Gender {
   Female = "female",
 }
 
+export interface Diagnosis {
+  code: string;
+  name: string;
+  latin?: string;
+}
+
 export interface BaseEntry {
   id: string;
   description: string;
@@ -64,9 +70,3 @@ export type PublicPatient = Omit<PatientData, "ssn" | "entries">;
 export type NewPatientData = Omit<PatientData, "id">;
 
 export type NonSensitivePatientData = Omit<PatientData, "ssn">;
-
-export interface Diagnosis {
-  code: string;
-  name: string;
-  latin?: string;
-}

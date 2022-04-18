@@ -11,6 +11,7 @@ const Person = (): JSX.Element => {
     id: " ",
     occupation: " ",
     gender: Gender.Female,
+    entries: [],
   });
 
   const { id } = useParams<{ id: string }>();
@@ -34,6 +35,34 @@ const Person = (): JSX.Element => {
       <p>{`${person.name || ""} is born on ${
         person.dateOfBirth || ""
       } and is a ${person.gender || ""}`}</p>
+      <p>{"Entries"}</p>
+      {person.entries?.map((val, i) => {
+        switch (val.type) {
+          case "HealthCheck":
+            return (
+              <div key={i}>
+                {`type is health check. health check rating is ${val.healthCheckRating}`}
+              </div>
+            );
+            break;
+          case "OccupationalHealthcare":
+            return (
+              <div key={i}>
+                {`type is health check. employer name is ${val.employerName}`}
+              </div>
+            );
+            break;
+          case "Hospital":
+            return (
+              <div key={i}>
+                {`type is health check. discharge date is ${val.discharge.date}`}
+              </div>
+            );
+            break;
+          default:
+            break;
+        }
+      })}
     </div>
   );
 };
