@@ -2,6 +2,7 @@ import patientService from "../services/patientService";
 import express from "express";
 const patientRouter = express.Router();
 import { toNewPatientData } from "../utils";
+import { Entry } from "../types";
 
 patientRouter.get("/", (_req, res) => {
   const data = patientService.getNonSensitivePatientData();
@@ -13,6 +14,14 @@ patientRouter.get("/id/:id", (req, res) => {
   console.log("tried to get", num);
   const data = patientService.getOnePatientData(num);
   return res.json(data).end();
+});
+
+patientRouter.post("/id/:id/entries", (req, res) => {
+  const num: string = req.params.id;
+  const newEntry: Entry = req.body as Entry;
+  console.log("tried to post", num, newEntry);
+  const result: Entry = patientService.addPatientEntry(num, newEntry);
+  return res.json(result).end();
 });
 
 patientRouter.post("/", (req, res) => {

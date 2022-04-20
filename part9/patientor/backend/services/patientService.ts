@@ -4,6 +4,7 @@ import {
   PatientData,
   NewPatientData,
   PublicPatient,
+  Entry,
 } from "../types";
 import { nanoid } from "nanoid";
 
@@ -61,10 +62,23 @@ const addPatientData = ({
   return newPatient;
 };
 
+const addPatientEntry = (id: string, entry: Entry): Entry => {
+  const foundPatient = patientData.find((val) => val.id === id);
+  const finalEntry = {
+    ...entry,
+    id: nanoid(),
+  };
+  if (foundPatient) {
+    foundPatient.entries.push(finalEntry);
+  }
+  return finalEntry;
+};
+
 export default {
   getPatientData,
   getNonSensitivePatientData,
   getPublicPatientData,
   getOnePatientData,
   addPatientData,
+  addPatientEntry,
 };

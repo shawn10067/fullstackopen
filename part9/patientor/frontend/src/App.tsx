@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
 import { Button, Divider, Container } from "@material-ui/core";
 
 import { apiBaseUrl } from "./constants";
-import { useStateValue, setPatientList } from "./state";
+import { useStateValue, setPatientList, setDiagnosisList } from "./state";
 import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
@@ -21,6 +21,27 @@ const App = () => {
         const { data: patientListFromApi } = await axios.get<Patient[]>(
           `${apiBaseUrl}/patients`
         );
+
+        // creating diagnosis data
+        const arrayOfDiag = patientListFromApi
+          .flatMap((people) => people.entries)
+          .flatMap((entry) => entry?.diagnosisCodes)
+          .filter((diag) => diag !== undefined)
+          .map((diag) => {
+            if (diag === undefined) {
+              return {
+                code: "",
+                name: "",
+              };
+            }
+            return {
+              code: diag,
+              name: diag,
+            };
+          });
+
+        // setting diagnosis and patient list
+        dispatch(setDiagnosisList(arrayOfDiag));
         dispatch(setPatientList(patientListFromApi));
       } catch (e) {
         console.error(e);
