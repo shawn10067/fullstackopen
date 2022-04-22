@@ -10,8 +10,10 @@ import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import AddEntryModal from "../AddEntryModal";
+import AddHealthEntryModal from "../AddHealthModal";
 import { Button } from "@material-ui/core";
 import { HospitalEntryFormValues } from "../AddEntryModal/AddHealthEntryForm";
+import { HealthEntryFormValues } from "../AddHealthModal/AddEntryForm";
 
 const Person = (): JSX.Element => {
   // getting the id of the patient
@@ -28,7 +30,7 @@ const Person = (): JSX.Element => {
   });
   const [entries, setEntries] = useState<Entry[]>([]);
 
-  // holding modal state
+  // holding modal state (hospital)
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>();
 
@@ -39,9 +41,33 @@ const Person = (): JSX.Element => {
     setError(undefined);
   };
 
+  // holding modal state (health)
+  const [healthModalOpen, setHealthModalOpen] = React.useState<boolean>(false);
+  const [healthError, setHealthError] = React.useState<string>();
+
+  const openHealthModal = (): void => setHealthModalOpen(true);
+
+  const closeHealthModal = (): void => {
+    setHealthModalOpen(false);
+    setHealthError(undefined);
+  };
+
+  /*
+      // holding modal state (occupation)
+  const [occupationModalOpen, setOccupationModalOpen] = React.useState<boolean>(false);
+  const [occupationError, setOccupationError] = React.useState<string>();
+
+  const openOccupationModal = (): void => setOccupationModalOpen(true);
+
+  const closeOccupationModal = (): void => {
+    setOccupationModalOpen(false);
+    setOccupationError(undefined);
+  };
+  */
+
   // defining function to submit new entry
   const submitNewHospitalEntry = async (values: HospitalEntryFormValues) => {
-    console.log("Patient submitted", values);
+    console.log("Hospital submitted", values);
     const entry = {
       ...values,
       type: "Hospital",
@@ -70,6 +96,72 @@ const Person = (): JSX.Element => {
       }
     }
   };
+
+  // defining function to submit new entry
+  const submitNewHealthEntry = async (values: HealthEntryFormValues) => {
+    console.log("Health submitted", values);
+    const entry = {
+      ...values,
+      type: "Health",
+      diagnosisCodes: [],
+    };
+    try {
+      const { data: newEntry } = await axios.post<Entry>(
+        `${apiBaseUrl}/patients/id/${id || ""}/entries`,
+        entry
+      );
+      if (person.entries !== undefined) {
+        setEntries(entries.concat(newEntry));
+      } else {
+        setEntries([newEntry]);
+      }
+      closeModal();
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        console.error(e?.response?.data || "Unrecognized axios error");
+        setError(
+          String(e?.response?.data?.error) || "Unrecognized axios error"
+        );
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  };
+
+  /*
+    // defining function to submit new entry
+    const submitNewOccupationalEntry = async (values: HealthEntryFormValues) => {
+      console.log("Health submitted", values);
+      const entry = {
+        ...values,
+        type: "Health",
+        diagnosisCodes: [],
+      };
+      try {
+        const { data: newEntry } = await axios.post<Entry>(
+          `${apiBaseUrl}/patients/id/${id || ""}/entries`,
+          entry
+        );
+        if (person.entries !== undefined) {
+          setEntries(entries.concat(newEntry));
+        } else {
+          setEntries([newEntry]);
+        }
+        closeModal();
+      } catch (e: unknown) {
+        if (axios.isAxiosError(e)) {
+          console.error(e?.response?.data || "Unrecognized axios error");
+          setError(
+            String(e?.response?.data?.error) || "Unrecognized axios error"
+          );
+        } else {
+          console.error("Unknown error", e);
+          setError("Unknown error");
+        }
+      }
+    };
+    */
 
   // getting the patient data
   useEffect(() => {
@@ -209,8 +301,17 @@ const Person = (): JSX.Element => {
         error={error}
         onClose={closeModal}
       />
+      <AddHealthEntryModal
+        modalOpen={healthModalOpen}
+        onSubmit={submitNewHealthEntry}
+        error={healthError}
+        onClose={closeHealthModal}
+      />
       <Button variant="contained" onClick={() => openModal()}>
         Add New Hospital Entry
+      </Button>
+      <Button variant="contained" onClick={() => openHealthModal()}>
+        Add New Health Entry
       </Button>
     </div>
   );

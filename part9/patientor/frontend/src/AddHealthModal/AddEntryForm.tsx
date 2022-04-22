@@ -2,17 +2,21 @@ import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Field, Formik, Form } from "formik";
 
-import { TextField, DiagnosisSelection } from "../AddPatientModal/FormField";
-import { HospitalEntry } from "../types";
+import {
+  TextField,
+  DiagnosisSelection,
+  NumberField,
+} from "../AddPatientModal/FormField";
+import { HealthCheckEntry } from "../types";
 import { useStateValue } from "../state";
 
 /*
- * use type Hospital Entry, but omit id and type,
+ * use type Health, but omit id and entries,
  */
-export type HospitalEntryFormValues = Omit<HospitalEntry, "id" | "type">;
+export type HealthEntryFormValues = Omit<HealthCheckEntry, "id" | "type">;
 
 interface Props {
-  onSubmit: (values: HospitalEntryFormValues) => void;
+  onSubmit: (values: HealthEntryFormValues) => void;
   onCancel: () => void;
 }
 
@@ -26,10 +30,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         date: "",
         specialist: "",
         diagnosisCodes: [],
-        discharge: {
-          criteria: "",
-          date: "",
-        },
+        healthCheckRating: 0,
       }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -41,7 +42,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         if (!values.description) {
           errors.description = requiredError;
         }
-        if (!values.discharge) {
+        if (!values.healthCheckRating) {
           errors.discharge = requiredError;
         }
         if (!values.specialist) {
@@ -72,16 +73,10 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               component={TextField}
             />
             <Field
-              label="Discharge Criteria"
-              placeholder="Criteria"
-              name="discharge.criteria"
-              component={TextField}
-            />
-            <Field
-              label="Discharge Date"
-              placeholder="YYYY-MM-DD"
-              name="discharge.date"
-              component={TextField}
+              label="Health Check Ratings"
+              placeholder="0"
+              name="healthCheckRating"
+              component={NumberField}
             />
             <DiagnosisSelection
               diagnoses={Object.values(diagnoses)}
