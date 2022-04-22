@@ -42,11 +42,10 @@ export const AddOccupationEntryForm = ({ onSubmit, onCancel }: Props) => {
         let errors: { [field: string]: string | object } = {};
         if (!values.date) {
           errors.date = requiredError;
-        } else if (!isValid(values.date)) {
+        } else if (!isValid(new Date(values.date))) {
           errors.date = "Format date correctly";
-        } else {
-          errors.date = "";
         }
+
         if (!values.description) {
           errors.description = requiredError;
         }
@@ -59,7 +58,7 @@ export const AddOccupationEntryForm = ({ onSubmit, onCancel }: Props) => {
               startDate: requiredError,
             },
           });
-        } else if (!isValid(values.sickLeave.startDate)) {
+        } else if (!isValid(new Date(values.sickLeave.startDate))) {
           errors = Object.assign(errors, {
             sickLeave: {
               startDate: "Format date correctly.",
@@ -72,7 +71,7 @@ export const AddOccupationEntryForm = ({ onSubmit, onCancel }: Props) => {
               endDate: requiredError,
             },
           });
-        } else if (!isValid(values.sickLeave.endDate)) {
+        } else if (!isValid(new Date(values.sickLeave.endDate))) {
           errors = Object.assign(errors, {
             sickLeave: {
               endDate: "Format date correctly.",

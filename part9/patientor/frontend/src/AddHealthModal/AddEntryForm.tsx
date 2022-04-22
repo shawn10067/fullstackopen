@@ -40,7 +40,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         date: "",
         specialist: "",
         diagnosisCodes: [],
-        healthCheckRating: -1,
+        healthCheckRating: 1,
       }}
       onSubmit={onSubmit}
       validate={(values) => {
