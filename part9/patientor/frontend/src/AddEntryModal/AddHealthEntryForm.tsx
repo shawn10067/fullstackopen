@@ -5,7 +5,7 @@ import { Field, Formik, Form } from "formik";
 import { TextField, DiagnosisSelection } from "../AddPatientModal/FormField";
 import { HospitalEntry } from "../types";
 import { useStateValue } from "../state";
-
+import { isValid } from "date-fns";
 /*
  * use type Hospital Entry, but omit id and type,
  */
@@ -34,15 +34,37 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
       onSubmit={onSubmit}
       validate={(values) => {
         const requiredError = "Field is required";
-        const errors: { [field: string]: string } = {};
+        let errors: { [field: string]: string | object } = {};
         if (!values.date) {
           errors.date = requiredError;
+        } else if (!isValid(new Date(values.date))) {
+          errors.date = "Format date correctly.";
         }
         if (!values.description) {
           errors.description = requiredError;
         }
-        if (!values.discharge) {
-          errors.discharge = requiredError;
+        if (!values.discharge.date) {
+          errors = {
+            discharge: {
+              date: requiredError,
+            },
+          };
+        } else if (!isValid(new Date(values.discharge.date))) {
+          console.log("discharge date not correct");
+          errors = {
+            ...errors,
+            discharge: {
+              date: "Format date correctly.",
+            },
+          };
+        }
+        if (!values.discharge.criteria) {
+          errors = {
+            ...errors,
+            discharge: {
+              criteria: requiredError,
+            },
+          };
         }
         if (!values.specialist) {
           errors.specialist = requiredError;

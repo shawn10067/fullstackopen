@@ -104,6 +104,7 @@ const Person = (): JSX.Element => {
     const entry = {
       ...values,
       type: "HealthCheck",
+      healthCheckRating: values.healthCheckRating - 1,
       diagnosisCodes: [],
     };
     try {

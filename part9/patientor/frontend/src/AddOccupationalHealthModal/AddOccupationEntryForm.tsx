@@ -5,6 +5,7 @@ import { Field, Formik, Form } from "formik";
 import { TextField, DiagnosisSelection } from "../AddPatientModal/FormField";
 import { OccupationalHealthcareEntry } from "../types";
 import { useStateValue } from "../state";
+import { isValid } from "date-fns";
 
 /*
  * use type Health, but omit id and entries,
@@ -38,9 +39,11 @@ export const AddOccupationEntryForm = ({ onSubmit, onCancel }: Props) => {
       onSubmit={onSubmit}
       validate={(values) => {
         const requiredError = "Field is required";
-        const errors: { [field: string]: string } = {};
+        let errors: { [field: string]: string | object } = {};
         if (!values.date) {
           errors.date = requiredError;
+        } else if (!isValid(values.date)) {
+          errors.date = "Format date correctly";
         }
         if (!values.description) {
           errors.description = requiredError;
@@ -48,8 +51,33 @@ export const AddOccupationEntryForm = ({ onSubmit, onCancel }: Props) => {
         if (!values.employerName) {
           errors.employerName = requiredError;
         }
-        if (!values.sickLeave) {
-          errors.sickLeave = requiredError;
+        if (!values.sickLeave.startDate) {
+          errors = {
+            ...errors,
+            sickLeave: {
+              startDate: requiredError,
+            },
+          };
+        } else if (!isValid(values.sickLeave.startDate)) {
+          errors = {
+            ...errors,
+            sickLeave: {
+              startDate: "Format date correctly.",
+            },
+          };
+        }
+        if (!values.sickLeave.endDate) {
+          errors = {
+            sickLeave: {
+              endDate: requiredError,
+            },
+          };
+        } else if (!isValid(values.sickLeave.endDate)) {
+          errors = {
+            sickLeave: {
+              endDate: "Format date correctly.",
+            },
+          };
         }
         if (!values.specialist) {
           errors.specialist = requiredError;

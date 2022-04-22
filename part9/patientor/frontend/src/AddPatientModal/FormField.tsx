@@ -17,6 +17,12 @@ export type GenderOption = {
   label: string;
 };
 
+// structure of a single health option
+export type HealthOption = {
+  value: number;
+  label: string;
+};
+
 // props for select field component
 type SelectFieldProps = {
   name: string;
@@ -24,11 +30,40 @@ type SelectFieldProps = {
   options: GenderOption[];
 };
 
+type SelectFieldHealthProps = {
+  name: string;
+  label: string;
+  options: HealthOption[];
+};
+
 const FormikSelect = ({ field, ...props }: FieldProps) => (
   <Select {...field} {...props} />
 );
 
 export const SelectField = ({ name, label, options }: SelectFieldProps) => (
+  <>
+    <InputLabel>{label}</InputLabel>
+    <Field
+      fullWidth
+      style={{ marginBottom: "0.5em" }}
+      label={label}
+      component={FormikSelect}
+      name={name}
+    >
+      {options.map((option) => (
+        <MenuItem key={option.value} value={option.value}>
+          {option.label || option.value}
+        </MenuItem>
+      ))}
+    </Field>
+  </>
+);
+
+export const SelectFieldHealth = ({
+  name,
+  label,
+  options,
+}: SelectFieldHealthProps) => (
   <>
     <InputLabel>{label}</InputLabel>
     <Field
@@ -69,7 +104,7 @@ export const TextField = ({ field, label, placeholder }: TextProps) => (
 /*
   for exercises 9.24.-
 */
-
+/*
 interface NumberProps extends FieldProps {
   label: string;
   min: number;
@@ -102,6 +137,7 @@ export const NumberField = ({ field, label, min, max }: NumberProps) => {
     </div>
   );
 };
+*/
 
 export const DiagnosisSelection = ({
   diagnoses,

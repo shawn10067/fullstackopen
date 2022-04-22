@@ -1,11 +1,13 @@
 import React from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Field, Formik, Form } from "formik";
+import { isValid } from "date-fns";
 
 import {
   TextField,
   DiagnosisSelection,
-  NumberField,
+  SelectFieldHealth,
+  HealthOption,
 } from "../AddPatientModal/FormField";
 import { HealthCheckEntry } from "../types";
 import { useStateValue } from "../state";
@@ -23,6 +25,14 @@ interface Props {
 export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   const [{ diagnoses }] = useStateValue();
 
+  // health options
+  const healthOptions: HealthOption[] = [
+    { label: "CriticalRisk", value: 4 },
+    { label: "HighRisk", value: 3 },
+    { label: "LowRisk", value: 2 },
+    { label: "Healthy", value: 1 },
+  ];
+
   return (
     <Formik
       initialValues={{
@@ -30,7 +40,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         date: "",
         specialist: "",
         diagnosisCodes: [],
-        healthCheckRating: 0,
+        healthCheckRating: -1,
       }}
       onSubmit={onSubmit}
       validate={(values) => {
@@ -38,6 +48,9 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         const errors: { [field: string]: string } = {};
         if (!values.date) {
           errors.date = requiredError;
+        } else if (!isValid(new Date(values.date))) {
+          console.log(new Date(values.date));
+          errors.date = "Format date correctly.";
         }
         if (!values.description) {
           errors.description = requiredError;
@@ -72,12 +85,10 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
               name="specialist"
               component={TextField}
             />
-            <Field
+            <SelectFieldHealth
               label="Health Check Ratings"
-              min={0}
-              max={4}
               name="healthCheckRating"
-              component={NumberField}
+              options={healthOptions}
             />
             <DiagnosisSelection
               diagnoses={Object.values(diagnoses)}
