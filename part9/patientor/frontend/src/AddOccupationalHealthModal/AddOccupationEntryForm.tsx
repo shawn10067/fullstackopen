@@ -44,6 +44,8 @@ export const AddOccupationEntryForm = ({ onSubmit, onCancel }: Props) => {
           errors.date = requiredError;
         } else if (!isValid(values.date)) {
           errors.date = "Format date correctly";
+        } else {
+          errors.date = "";
         }
         if (!values.description) {
           errors.description = requiredError;
@@ -52,32 +54,30 @@ export const AddOccupationEntryForm = ({ onSubmit, onCancel }: Props) => {
           errors.employerName = requiredError;
         }
         if (!values.sickLeave.startDate) {
-          errors = {
-            ...errors,
+          errors = Object.assign(errors, {
             sickLeave: {
               startDate: requiredError,
             },
-          };
+          });
         } else if (!isValid(values.sickLeave.startDate)) {
-          errors = {
-            ...errors,
+          errors = Object.assign(errors, {
             sickLeave: {
               startDate: "Format date correctly.",
             },
-          };
+          });
         }
         if (!values.sickLeave.endDate) {
-          errors = {
+          errors = Object.assign(errors, {
             sickLeave: {
               endDate: requiredError,
             },
-          };
+          });
         } else if (!isValid(values.sickLeave.endDate)) {
-          errors = {
+          errors = Object.assign(errors, {
             sickLeave: {
               endDate: "Format date correctly.",
             },
-          };
+          });
         }
         if (!values.specialist) {
           errors.specialist = requiredError;

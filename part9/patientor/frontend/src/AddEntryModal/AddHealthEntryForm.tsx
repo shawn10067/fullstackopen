@@ -44,27 +44,25 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
           errors.description = requiredError;
         }
         if (!values.discharge.date) {
-          errors = {
+          errors = Object.assign(errors, {
             discharge: {
               date: requiredError,
             },
-          };
+          });
         } else if (!isValid(new Date(values.discharge.date))) {
           console.log("discharge date not correct");
-          errors = {
-            ...errors,
+          errors = Object.assign(errors, {
             discharge: {
               date: "Format date correctly.",
             },
-          };
+          });
         }
         if (!values.discharge.criteria) {
-          errors = {
-            ...errors,
+          errors = Object.assign(errors, {
             discharge: {
               criteria: requiredError,
             },
-          };
+          });
         }
         if (!values.specialist) {
           errors.specialist = requiredError;
