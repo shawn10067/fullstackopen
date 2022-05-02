@@ -1,6 +1,6 @@
 import { View, StyleSheet, Platform, Dimensions } from "react-native";
-import Constants from "expo-constants";
 import AppBarTab from "./AppBarTab";
+import Constants from "expo-constants";
 
 const styles = StyleSheet.create({
   container: {

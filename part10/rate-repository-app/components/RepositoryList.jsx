@@ -5,6 +5,9 @@ const styles = StyleSheet.create({
   separator: {
     height: 10,
   },
+  list: {
+    display: "flex",
+  },
 });
 
 const repositories = [
@@ -33,7 +36,8 @@ const repositories = [
   {
     id: "django.django",
     fullName: "django/django",
-    description: "The Web framework for perfectionists with deadlines.",
+    description:
+      "The Web framework for perfectionists with deadlines and things to do.",
     language: "Python",
     forksCount: 21015,
     stargazersCount: 48496,
@@ -77,6 +81,7 @@ const RepositoryList = () => {
       data={repositories}
       ItemSeparatorComponent={ItemSeparator}
       renderItem={ItemRenderer}
+      style={styles.list}
     />
   );
 };
