@@ -56,6 +56,17 @@ const repositories = [
     reviewCount: 0,
     ownerAvatarUrl: "https://avatars3.githubusercontent.com/u/13142323?v=4",
   },
+  {
+    id: "randomPerson",
+    fullName: "sanaLehal/Remax",
+    description: "Best realtor in GTA.",
+    language: "Real Estate Agent",
+    forksCount: 5455,
+    stargazersCount: 4455,
+    ratingAverage: 100,
+    reviewCount: 5,
+    ownerAvatarUrl: "http://38797.alserver18.com/userfiles/images/top-img.jpg",
+  },
 ];
 
 const ItemSeparator = () => <View style={styles.separator} />;

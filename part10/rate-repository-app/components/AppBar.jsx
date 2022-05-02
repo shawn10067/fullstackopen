@@ -1,11 +1,18 @@
-import { View, StyleSheet, Platform, Dimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Platform,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import AppBarTab from "./AppBarTab";
 import Constants from "expo-constants";
 
 const styles = StyleSheet.create({
   container: {
     display: "flex",
-    paddingVertical: Platform.OS === "ios" ? 0 : Constants.statusBarHeight + 10,
+    alignSelf: "flex-start",
+    paddingVertical: Platform.OS === "ios" ? 5 : Constants.statusBarHeight + 10,
     backgroundColor: "#24292e",
     width: Dimensions.get("window").width,
     flexDirection: "row",
@@ -17,10 +24,14 @@ const styles = StyleSheet.create({
 const AppBar = () => {
   return (
     <View style={styles.container} onP>
-      <AppBarTab title={"I am Sia's"}></AppBarTab>
-      <AppBarTab title={"Salam"}></AppBarTab>
+      <ScrollView horizontal>
+        <AppBarTab title={"Home"} link={"/"}></AppBarTab>
+        <AppBarTab title={"Sign In"} link={"/signIn"}></AppBarTab>
+      </ScrollView>
     </View>
   );
 };
+
+/*<AppBarTab title={"I am Sia's"} link={"/"}></AppBarTab>*/
 
 export default AppBar;
