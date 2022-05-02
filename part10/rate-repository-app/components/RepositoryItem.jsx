@@ -68,7 +68,7 @@ const RepositoryItem = ({
                 style={{
                   backgroundColor: "#0366d6",
                   padding: 10,
-                  borderRadius: 25,
+                  borderRadius: 15,
                   color: "white",
                   margin: 4,
                 }}
@@ -80,9 +80,12 @@ const RepositoryItem = ({
         </View>
       </View>
       <View>
-        <Text>
-          {`Description = ${description}\nLanguage = ${language}\nAverage Rating = ${ratingAverage}\nReview Count = ${reviewCount}\n`}
-        </Text>
+        <View style={styles.otherContentView}>
+          <Text>{ratingAverage}</Text>
+          <Text>{reviewCount}</Text>
+          <Text>{stargazersCount}</Text>
+          <Text>{forksCount}</Text>
+        </View>
       </View>
     </View>
   );
