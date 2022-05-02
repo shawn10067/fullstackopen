@@ -66,6 +66,7 @@ const ItemRenderer = ({ item }) => {
       stargazersCount={item.stargazersCount}
       ratingAverage={item.ratingAverage}
       reviewCount={item.reviewCount}
+      imageURL={item.ownerAvatarUrl}
     />
   );
 };

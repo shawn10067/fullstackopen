@@ -1,12 +1,15 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Platform, Dimensions } from "react-native";
 import Constants from "expo-constants";
+import AppBarTab from "./AppBarTab";
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: Constants.statusBarHeight + 5,
+    display: "flex",
+    paddingVertical: Platform.OS === "ios" ? 0 : Constants.statusBarHeight + 10,
     backgroundColor: "#24292e",
-    width: 400,
-    alignItems: "center",
+    width: Dimensions.get("window").width,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
     paddingBottom: 10,
   },
 });
@@ -14,7 +17,8 @@ const styles = StyleSheet.create({
 const AppBar = () => {
   return (
     <View style={styles.container} onP>
-      <Text style={{ color: "white", fontWeight: "bold" }}>I Am Sia's</Text>
+      <AppBarTab title={"I am Sia's"}></AppBarTab>
+      <AppBarTab title={"Salam"}></AppBarTab>
     </View>
   );
 };
