@@ -1,6 +1,6 @@
-import { gql } from "apollo-server";
-import * as yup from "yup";
-import User from "../../models/User";
+import { gql } from 'apollo-server';
+import * as yup from 'yup';
+import User from '../../models/User';
 
 export const typeDefs = gql`
   extend type Query {
@@ -22,7 +22,7 @@ export const resolvers = {
       const { first, after } = await argsSchema.validate(args);
 
       return User.query().cursorPaginate({
-        orderBy: [{ column: "createdAt", order: "desc" }, "id"],
+        orderBy: [{ column: 'createdAt', order: 'desc' }, 'id'],
         first,
         after,
       });

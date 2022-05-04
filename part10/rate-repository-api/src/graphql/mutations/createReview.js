@@ -1,13 +1,13 @@
-import { gql, ApolloError } from "apollo-server";
-import * as yup from "yup";
+import { gql, ApolloError } from 'apollo-server';
+import * as yup from 'yup';
 
 import {
   githubClient,
   GithubRepositoryNotFoundError,
-} from "../../utils/githubClient";
+} from '../../utils/githubClient';
 
-import Repository from "../../models/Repository";
-import Review from "../../models/Review";
+import Repository from '../../models/Repository';
+import Review from '../../models/Review';
 
 export const typeDefs = gql`
   input CreateReviewInput {
@@ -26,16 +26,16 @@ export const typeDefs = gql`
 `;
 
 class RepositoryAlreadyReviewedError extends ApolloError {
-  constructor(message = "User has already reviewed this repository") {
-    super(message, "REPOSITORY_ALREADY_REVIEWED");
+  constructor(message = 'User has already reviewed this repository') {
+    super(message, 'REPOSITORY_ALREADY_REVIEWED');
   }
 }
 
 const createRepositoryId = (ownerUsername, repositoryName) =>
-  [ownerUsername, repositoryName].join(".");
+  [ownerUsername, repositoryName].join('.');
 
 const createReviewId = (userId, repositoryId) => {
-  return [userId, repositoryId].join(".");
+  return [userId, repositoryId].join('.');
 };
 
 const argsSchema = yup.object().shape({
@@ -70,13 +70,13 @@ export const resolvers = {
       if (!existingRepository) {
         const githubRepository = await githubClient.getRepository(
           ownerName,
-          repositoryName
+          repositoryName,
         );
 
         if (!githubRepository) {
           throw GithubRepositoryNotFoundError.fromNames(
             ownerName,
-            repositoryName
+            repositoryName,
           );
         }
 

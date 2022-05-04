@@ -1,9 +1,9 @@
-import { gql, ApolloError } from "apollo-server";
-import * as yup from "yup";
-import { v4 as uuid } from "uuid";
-import bcrypt from "bcrypt";
+import { gql, ApolloError } from 'apollo-server';
+import * as yup from 'yup';
+import { v4 as uuid } from 'uuid';
+import bcrypt from 'bcrypt';
 
-import User from "../../models/User";
+import User from '../../models/User';
 
 export const typeDefs = gql`
   input CreateUserInput {
@@ -21,13 +21,13 @@ export const typeDefs = gql`
 
 class UsernameTakenError extends ApolloError {
   constructor(message, properties) {
-    super(message, "USERNAME_TAKEN", properties);
+    super(message, 'USERNAME_TAKEN', properties);
   }
 
   static fromUsername(username) {
     return new UsernameTakenError(
       `Username ${username} is already taken. Choose another username`,
-      { username }
+      { username },
     );
   }
 }

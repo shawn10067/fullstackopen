@@ -1,26 +1,26 @@
-import { get } from "lodash";
+import { get } from 'lodash';
 
-import githubClient from "../../utils/githubClient";
-import Repository from "../../models/Repository";
+import githubClient from '../../utils/githubClient';
+import Repository from '../../models/Repository';
 
 const getRepositoryPayload = (
   repository,
   githubRepository,
   reviewCount,
-  ratingAverage
+  ratingAverage,
 ) => ({
   id: repository.id,
   name: repository.name,
   ownerName: repository.ownerName,
   createdAt: repository.createdAt ? new Date(repository.createdAt) : null,
-  fullName: [repository.ownerName, repository.name].join("/"),
+  fullName: [repository.ownerName, repository.name].join('/'),
   reviewCount,
   ratingAverage: Math.round(ratingAverage),
-  forksCount: get(githubRepository, "forks_count") || 0,
-  stargazersCount: get(githubRepository, "stargazers_count") || 0,
-  description: get(githubRepository, "description") || null,
-  language: get(githubRepository, "language") || null,
-  ownerAvatarUrl: get(githubRepository, "owner.avatar_url") || null,
+  forksCount: get(githubRepository, 'forks_count') || 0,
+  stargazersCount: get(githubRepository, 'stargazers_count') || 0,
+  description: get(githubRepository, 'description') || null,
+  language: get(githubRepository, 'language') || null,
+  ownerAvatarUrl: get(githubRepository, 'owner.avatar_url') || null,
 });
 
 const getRepositories = async (ctx) => {
@@ -29,7 +29,7 @@ const getRepositories = async (ctx) => {
   } = ctx;
 
   const data = await Repository.query().cursorPaginate({
-    orderBy: ["createdAt", "id"],
+    orderBy: ['createdAt', 'id'],
   });
 
   const repositoryIds = data.edges.map((edge) => edge.node.id);
@@ -37,8 +37,8 @@ const getRepositories = async (ctx) => {
   const [githubRepositories, reviewCounts, ratingAverages] = await Promise.all([
     Promise.all(
       data.edges.map((edge) =>
-        githubClient.getRepository(edge.node.ownerName, edge.node.name)
-      )
+        githubClient.getRepository(edge.node.ownerName, edge.node.name),
+      ),
     ),
     repositoryReviewCountLoader.loadMany(repositoryIds),
     repositoryRatingAverageLoader.loadMany(repositoryIds),
@@ -52,7 +52,7 @@ const getRepositories = async (ctx) => {
         edge.node,
         githubRepositories[index],
         reviewCounts[index],
-        ratingAverages[index]
+        ratingAverages[index],
       ),
     })),
   };

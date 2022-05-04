@@ -1,10 +1,10 @@
-import { ApolloServer, toApolloError, ApolloError } from "apollo-server";
-import { ValidationError } from "yup";
+import { ApolloServer, toApolloError, ApolloError } from 'apollo-server';
+import { ValidationError } from 'yup';
 
-import AuthService from "./utils/authService";
-import createDataLoaders from "./utils/createDataLoaders";
-import logger from "./utils/logger";
-import { resolvers, typeDefs } from "./graphql/schema";
+import AuthService from './utils/authService';
+import createDataLoaders from './utils/createDataLoaders';
+import logger from './utils/logger';
+import { resolvers, typeDefs } from './graphql/schema';
 
 const apolloErrorFormatter = (error) => {
   logger.error(error);
@@ -13,12 +13,12 @@ const apolloErrorFormatter = (error) => {
   const isGraphQLError = !(originalError instanceof Error);
 
   let normalizedError = new ApolloError(
-    "Something went wrong",
-    "INTERNAL_SERVER_ERROR"
+    'Something went wrong',
+    'INTERNAL_SERVER_ERROR',
   );
 
   if (originalError instanceof ValidationError) {
-    normalizedError = toApolloError(error, "BAD_USER_INPUT");
+    normalizedError = toApolloError(error, 'BAD_USER_INPUT');
   } else if (error.originalError instanceof ApolloError || isGraphQLError) {
     normalizedError = error;
   }
@@ -35,7 +35,7 @@ const createApolloServer = () => {
       const authorization = req.headers.authorization;
 
       const accessToken = authorization
-        ? authorization.split(" ")[1]
+        ? authorization.split(' ')[1]
         : undefined;
       const dataLoaders = createDataLoaders();
 

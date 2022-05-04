@@ -1,10 +1,10 @@
-import dotenv from "dotenv";
-import path from "path";
-import { knexSnakeCaseMappers } from "objection";
+import dotenv from 'dotenv';
+import path from 'path';
+import { knexSnakeCaseMappers } from 'objection';
 
-import knexfile from "../knexfile";
+import knexfile from '../knexfile';
 
-dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
+dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
 export const API_PORT = process.env.PORT || 5000;
 
@@ -18,7 +18,7 @@ export const KNEX_CONFIG = {
 };
 
 export const GITHUB_API_URL =
-  process.env.GITHUB_API_URL || "https://api.github.com";
+  process.env.GITHUB_API_URL || 'https://api.github.com';
 
 export const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 

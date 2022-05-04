@@ -1,7 +1,7 @@
-import { gql } from "apollo-server";
-import * as yup from "yup";
+import { gql } from 'apollo-server';
+import * as yup from 'yup';
 
-import Review from "../../models/Review";
+import Review from '../../models/Review';
 
 export const typeDefs = gql`
   type User {
@@ -28,7 +28,7 @@ export const resolvers = {
           userId: id,
         })
         .cursorPaginate({
-          orderBy: [{ column: "createdAt", order: "desc" }, "id"],
+          orderBy: [{ column: 'createdAt', order: 'desc' }, 'id'],
           first,
           after,
         });
@@ -36,7 +36,7 @@ export const resolvers = {
     reviewCount: async (
       { id },
       args,
-      { dataLoaders: { userReviewCountLoader } }
+      { dataLoaders: { userReviewCountLoader } },
     ) => userReviewCountLoader.load(id),
   },
 };

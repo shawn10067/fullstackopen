@@ -1,8 +1,8 @@
-import { gql, UserInputError } from "apollo-server";
-import * as yup from "yup";
-import bcrypt from "bcrypt";
+import { gql, UserInputError } from 'apollo-server';
+import * as yup from 'yup';
+import bcrypt from 'bcrypt';
 
-import User from "../../models/User";
+import User from '../../models/User';
 
 export const typeDefs = gql`
   input AuthenticateInput {
@@ -43,13 +43,13 @@ export const resolvers = {
       const user = await User.query().findOne({ username });
 
       if (!user) {
-        throw new UserInputError("Invalid username or password");
+        throw new UserInputError('Invalid username or password');
       }
 
       const match = await bcrypt.compare(password, user.password);
 
       if (!match) {
-        throw new UserInputError("Invalid username or password");
+        throw new UserInputError('Invalid username or password');
       }
 
       return {

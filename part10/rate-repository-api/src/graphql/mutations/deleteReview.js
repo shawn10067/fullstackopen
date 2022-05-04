@@ -1,6 +1,6 @@
-import { gql, UserInputError, ForbiddenError } from "apollo-server";
+import { gql, UserInputError, ForbiddenError } from 'apollo-server';
 
-import Review from "../../models/Review";
+import Review from '../../models/Review';
 
 export const typeDefs = gql`
   extend type Mutation {
@@ -23,7 +23,7 @@ export const resolvers = {
       }
 
       if (review.userId !== currentUser.id) {
-        throw new ForbiddenError("User is not authorized to delete the review");
+        throw new ForbiddenError('User is not authorized to delete the review');
       }
 
       await Review.query().findById(args.id).delete();

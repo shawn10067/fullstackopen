@@ -1,33 +1,33 @@
-import LRUCache from "lru-cache";
-import { ApolloError } from "apollo-server";
-import { pick, get } from "lodash";
-import axios from "axios";
+import LRUCache from 'lru-cache';
+import { ApolloError } from 'apollo-server';
+import { pick, get } from 'lodash';
+import axios from 'axios';
 
 import {
   GITHUB_API_URL,
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
-} from "../config";
+} from '../config';
 
 const oneHour = 1000 * 60 * 60;
 
 const HTTP_CLIENT_ERROR = Symbol();
 
 const isNotFoundError = (error) =>
-  get(error[HTTP_CLIENT_ERROR], "response.status") === 404;
+  get(error[HTTP_CLIENT_ERROR], 'response.status') === 404;
 
 export class GithubError extends ApolloError {
   constructor(message, properties) {
-    super(message, "GITHUB_API_FAILURE", properties);
+    super(message, 'GITHUB_API_FAILURE', properties);
   }
 
   static fromHttpClientError(error) {
-    const githubError = new GithubError("GitHub API request failed", {
+    const githubError = new GithubError('GitHub API request failed', {
       response: pick(error.response, [
-        "status",
-        "statusText",
-        "headers",
-        "data",
+        'status',
+        'statusText',
+        'headers',
+        'data',
       ]),
     });
 
@@ -39,13 +39,13 @@ export class GithubError extends ApolloError {
 
 export class GithubRepositoryNotFoundError extends ApolloError {
   constructor(message, properties) {
-    super(message, "GITHUB_REPOSITORY_NOT_FOUND", properties);
+    super(message, 'GITHUB_REPOSITORY_NOT_FOUND', properties);
   }
 
   static fromNames(ownerName, repositoryName) {
     return new GithubRepositoryNotFoundError(
       `GitHub repository ${repositoryName} owned by ${ownerName} does not exists`,
-      { ownerName, repositoryName }
+      { ownerName, repositoryName },
     );
   }
 }
@@ -114,7 +114,7 @@ export class GithubClient {
     try {
       const data = await this.getRequestWithCache(
         `repository.${ownerName}.${repository}`,
-        `/repos/${ownerName}/${repository}`
+        `/repos/${ownerName}/${repository}`,
       );
 
       return data;

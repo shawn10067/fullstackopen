@@ -1,10 +1,10 @@
-import { AuthenticationError } from "apollo-server";
+import { AuthenticationError } from 'apollo-server';
 
-import { ACCESS_TOKEN_EXPIRATION_TIME } from "../config";
-import signJwt from "./signJwt";
-import verifyJwt from "./verifyJwt";
+import { ACCESS_TOKEN_EXPIRATION_TIME } from '../config';
+import signJwt from './signJwt';
+import verifyJwt from './verifyJwt';
 
-const subject = "accessToken";
+const subject = 'accessToken';
 
 class AuthService {
   constructor({ accessToken, dataLoaders }) {
@@ -40,7 +40,7 @@ class AuthService {
 
   async getUserOrFail(error) {
     const normalizedError =
-      error || new AuthenticationError("Authorization is required");
+      error || new AuthenticationError('Authorization is required');
 
     const user = await this.getUser();
 
@@ -60,7 +60,7 @@ class AuthService {
         {
           expiresIn: expiresAt - new Date(),
           subject,
-        }
+        },
       ),
       expiresAt,
     };

@@ -1,17 +1,17 @@
-import { isNumber } from "lodash";
+import { isNumber } from 'lodash';
 
-import normalizeOrderBy from "./normalizeOrderBy";
-import reverseOrderBy from "./reverseOrderBy";
-import serializeCursor from "./serializeCursor";
-import parseCursor from "./parseCursor";
-import cursorWhere from "./cursorWhere";
+import normalizeOrderBy from './normalizeOrderBy';
+import reverseOrderBy from './reverseOrderBy';
+import serializeCursor from './serializeCursor';
+import parseCursor from './parseCursor';
+import cursorWhere from './cursorWhere';
 
 const getValidLimitOrFail = ({ first, last }) => {
   const limit = isNumber(first) ? first : isNumber(last) ? last : 30;
 
   if (limit < 0 || limit > 100) {
     throw new Error(
-      "Limit must be greater than 0 and less than or equal to 100"
+      'Limit must be greater than 0 and less than or equal to 100',
     );
   }
 
@@ -26,12 +26,12 @@ const createCursor = (row, orderBy) => {
 
 const cursorPaginate = async (
   builder,
-  { orderBy: orderByOption, after, before, first, last }
+  { orderBy: orderByOption, after, before, first, last },
 ) => {
   let orderBy = normalizeOrderBy(orderByOption);
 
   if (orderBy.length === 0) {
-    throw new Error("At least one order by column must be provided");
+    throw new Error('At least one order by column must be provided');
   }
 
   if (before) {
@@ -52,9 +52,9 @@ const cursorPaginate = async (
 
   const paginationQuery = cursorQuery.clone().limit(limit).orderBy(orderBy);
 
-  const cursorCountQuery = cursorQuery.clone().count({ count: "*" }).first();
+  const cursorCountQuery = cursorQuery.clone().count({ count: '*' }).first();
 
-  const totalCountQuery = builder.clone().count({ count: "*" }).first();
+  const totalCountQuery = builder.clone().count({ count: '*' }).first();
 
   const [rows, cursorCountObject, totalCountObject] = await Promise.all([
     paginationQuery,

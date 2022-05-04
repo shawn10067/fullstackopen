@@ -1,4 +1,4 @@
-import { gql } from "apollo-server";
+import { gql } from 'apollo-server';
 
 export const typeDefs = gql`
   type Review {
@@ -20,7 +20,7 @@ export const resolvers = {
     repository: (
       { repositoryId },
       args,
-      { dataLoaders: { repositoryLoader } }
+      { dataLoaders: { repositoryLoader } },
     ) => repositoryLoader.load(repositoryId),
   },
 };

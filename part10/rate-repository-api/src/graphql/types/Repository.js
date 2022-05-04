@@ -1,9 +1,9 @@
-import { gql } from "apollo-server";
-import { get } from "lodash";
-import * as yup from "yup";
+import { gql } from 'apollo-server';
+import { get } from 'lodash';
+import * as yup from 'yup';
 
-import githubClient from "../../utils/githubClient";
-import Review from "../../models/Review";
+import githubClient from '../../utils/githubClient';
+import Review from '../../models/Review';
 
 export const typeDefs = gql`
   type Repository {
@@ -52,7 +52,7 @@ export const resolvers = {
           repositoryId: id,
         })
         .cursorPaginate({
-          orderBy: [{ column: "createdAt", direction: "desc" }, "id"],
+          orderBy: [{ column: 'createdAt', direction: 'desc' }, 'id'],
           first,
           after,
         });
@@ -60,17 +60,17 @@ export const resolvers = {
     ratingAverage: async (
       { id },
       args,
-      { dataLoaders: { repositoryRatingAverageLoader } }
+      { dataLoaders: { repositoryRatingAverageLoader } },
     ) => Math.round(await repositoryRatingAverageLoader.load(id)),
     reviewCount: (
       { id },
       args,
-      { dataLoaders: { repositoryReviewCountLoader } }
+      { dataLoaders: { repositoryReviewCountLoader } },
     ) => repositoryReviewCountLoader.load(id),
     userHasReviewed: async (
       { id },
       args,
-      { dataLoaders: { userRepositoryReviewExistsLoader }, authService }
+      { dataLoaders: { userRepositoryReviewExistsLoader }, authService },
     ) => {
       const currentUser = await authService.getUser();
 
@@ -78,30 +78,30 @@ export const resolvers = {
         ? userRepositoryReviewExistsLoader.load([currentUser.id, id])
         : null;
     },
-    fullName: ({ ownerName, name }) => [ownerName, name].join("/"),
+    fullName: ({ ownerName, name }) => [ownerName, name].join('/'),
     ownerAvatarUrl: makeGithubRepositoryResolver((repository) =>
-      get(repository, "owner.avatar_url")
+      get(repository, 'owner.avatar_url'),
     ),
     description: makeGithubRepositoryResolver((repository) =>
-      get(repository, "description")
+      get(repository, 'description'),
     ),
     stargazersCount: makeGithubRepositoryResolver(
-      (repository) => get(repository, "stargazers_count") || 0
+      (repository) => get(repository, 'stargazers_count') || 0,
     ),
     watchersCount: makeGithubRepositoryResolver(
-      (repository) => get(repository, "watchers_count") || 0
+      (repository) => get(repository, 'watchers_count') || 0,
     ),
     forksCount: makeGithubRepositoryResolver(
-      (repository) => get(repository, "forks_count") || 0
+      (repository) => get(repository, 'forks_count') || 0,
     ),
     openIssuesCount: makeGithubRepositoryResolver(
-      (repository) => get(repository, "open_issues_count") || 0
+      (repository) => get(repository, 'open_issues_count') || 0,
     ),
     url: makeGithubRepositoryResolver((repository) =>
-      get(repository, "html_url")
+      get(repository, 'html_url'),
     ),
     language: makeGithubRepositoryResolver((repository) =>
-      get(repository, "language")
+      get(repository, 'language'),
     ),
   },
 };

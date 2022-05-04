@@ -1,23 +1,23 @@
-import { gql } from "apollo-server";
-import { merge } from "lodash";
+import { gql } from 'apollo-server';
+import { merge } from 'lodash';
 
-import Repository from "./types/Repository";
-import repositoryQuery from "./queries/repository";
-import User from "./types/User";
-import createUserMutation from "./mutations/createUser";
-import authenticateMutation from "./mutations/authenticate";
-import usersQuery from "./queries/users";
-import meQuery from "./queries/me";
-import repositoriesQuery from "./queries/repositories";
-import PageInfo from "./types/PageInfo";
-import RepositoryConnection from "./types/RepositoryConnection";
-import OrderDirection from "./enums/OrderDirection";
-import createReviewMutation from "./mutations/createReview";
-import Review from "./types/Review";
-import ReviewConnection from "./types/ReviewConnection";
-import UserConnection from "./types/UserConnection";
-import deleteReviewMutation from "./mutations/deleteReview";
-import DateTime from "./scalars/DateTime";
+import Repository from './types/Repository';
+import repositoryQuery from './queries/repository';
+import User from './types/User';
+import createUserMutation from './mutations/createUser';
+import authenticateMutation from './mutations/authenticate';
+import usersQuery from './queries/users';
+import meQuery from './queries/me';
+import repositoriesQuery from './queries/repositories';
+import PageInfo from './types/PageInfo';
+import RepositoryConnection from './types/RepositoryConnection';
+import OrderDirection from './enums/OrderDirection';
+import createReviewMutation from './mutations/createReview';
+import Review from './types/Review';
+import ReviewConnection from './types/ReviewConnection';
+import UserConnection from './types/UserConnection';
+import deleteReviewMutation from './mutations/deleteReview';
+import DateTime from './scalars/DateTime';
 
 const rootTypeDefs = gql`
   type Query {
@@ -67,5 +67,5 @@ export const resolvers = merge(
   Review.resolvers,
   ReviewConnection.resolvers,
   UserConnection.resolvers,
-  deleteReviewMutation.resolvers
+  deleteReviewMutation.resolvers,
 );

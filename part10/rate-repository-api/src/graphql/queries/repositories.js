@@ -1,8 +1,8 @@
-import { gql } from "apollo-server";
-import { raw } from "objection";
-import * as yup from "yup";
+import { gql } from 'apollo-server';
+import { raw } from 'objection';
+import * as yup from 'yup';
 
-import Repository from "../../models/Repository";
+import Repository from '../../models/Repository';
 
 export const typeDefs = gql`
   enum AllRepositoriesOrderBy {
@@ -28,15 +28,15 @@ export const typeDefs = gql`
 const argsSchema = yup.object({
   after: yup.string(),
   first: yup.number().min(1).max(30).default(30),
-  orderDirection: yup.string().default("DESC"),
-  orderBy: yup.string().default("CREATED_AT"),
+  orderDirection: yup.string().default('DESC'),
+  orderBy: yup.string().default('CREATED_AT'),
   searchKeyword: yup.string().trim(),
   ownerName: yup.string().trim(),
 });
 
 const orderColumnByOrderBy = {
-  CREATED_AT: "createdAt",
-  RATING_AVERAGE: "ratingAverage",
+  CREATED_AT: 'createdAt',
+  RATING_AVERAGE: 'ratingAverage',
 };
 
 const getLikeFilter = (value) => `%${value}%`;
@@ -68,17 +68,17 @@ export const resolvers = {
 
         query = query.where((qb) => {
           return qb
-            .where("ownerName", "like", likeFilter)
-            .orWhere("name", "like", likeFilter);
+            .where('ownerName', 'like', likeFilter)
+            .orWhere('name', 'like', likeFilter);
         });
       }
 
-      if (orderColumn === "ratingAverage") {
+      if (orderColumn === 'ratingAverage') {
         query = query.select([
-          "repositories.*",
+          'repositories.*',
           // Missing reviews should have average of 0 not null
           raw(
-            "coalesce((select avg(rating) as rating_average from reviews where repository_id = repositories.id group by repository_id), 0) as rating_average"
+            'coalesce((select avg(rating) as rating_average from reviews where repository_id = repositories.id group by repository_id), 0) as rating_average',
           ),
         ]);
       }
@@ -88,7 +88,7 @@ export const resolvers = {
         after,
         orderBy: [
           { column: orderColumn, order: orderDirection.toLowerCase() },
-          "id",
+          'id',
         ],
       });
     },

@@ -6,21 +6,21 @@ const createDateColumns = (date) => ({
 });
 
 const loremIpsum =
-  "Lorem ipsum dolor sit amet, per brute apeirian ei. Malis facilisis vel ex, ex vivendo signiferumque nam, nam ad natum electram constituto. Causae latine at sea, ex nec ullum ceteros, est ut dicant splendide. Omnis electram ullamcorper est ut.";
+  'Lorem ipsum dolor sit amet, per brute apeirian ei. Malis facilisis vel ex, ex vivendo signiferumque nam, nam ad natum electram constituto. Causae latine at sea, ex nec ullum ceteros, est ut dicant splendide. Omnis electram ullamcorper est ut.';
 
-const kalleId = "bbe42984-051b-4a01-b45d-b8d29c32200c";
-const elinaId = "cff8872a-8ff5-4092-ac2f-d79e65f18aa2";
-const mattiId = "1b10e4d8-57ee-4d00-8886-e4a049d7ff8f";
-const johndoeId = "9b9d927e-2ee9-4f93-b96b-c8f677c63a5f";
-const leeroyjenkinsId = "753f3e99-e73a-43a3-9a50-b30d7727c0eb";
+const kalleId = 'bbe42984-051b-4a01-b45d-b8d29c32200c';
+const elinaId = 'cff8872a-8ff5-4092-ac2f-d79e65f18aa2';
+const mattiId = '1b10e4d8-57ee-4d00-8886-e4a049d7ff8f';
+const johndoeId = '9b9d927e-2ee9-4f93-b96b-c8f677c63a5f';
+const leeroyjenkinsId = '753f3e99-e73a-43a3-9a50-b30d7727c0eb';
 
-const formikId = "jaredpalmer.formik";
-const reactAsyncId = "async-library.react-async";
-const railsId = "rails.rails";
-const djangoId = "django.django";
+const formikId = 'jaredpalmer.formik';
+const reactAsyncId = 'async-library.react-async';
+const railsId = 'rails.rails';
+const djangoId = 'django.django';
 
 const createReviewId = (userId, repositoryId) =>
-  [userId, repositoryId].join(".");
+  [userId, repositoryId].join('.');
 
 const createIdColumns = (userId, repositoryId) => ({
   id: createReviewId(userId, repositoryId),
@@ -29,9 +29,9 @@ const createIdColumns = (userId, repositoryId) => ({
 });
 
 exports.seed = async (knex) => {
-  await knex("reviews").del();
+  await knex('reviews').del();
 
-  await knex("reviews").insert([
+  await knex('reviews').insert([
     // kalle's reviews
     {
       rating: 95,
