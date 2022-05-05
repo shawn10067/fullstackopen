@@ -1,4 +1,5 @@
 import { FlatList, View, StyleSheet } from "react-native";
+import useRepositories from "../utils/UseRepositories";
 import RepositoryItem from "./RepositoryItem";
 
 const styles = StyleSheet.create({
@@ -9,7 +10,7 @@ const styles = StyleSheet.create({
     display: "flex",
   },
 });
-
+/*
 const repositories = [
   {
     id: "jaredpalmer.formik",
@@ -67,7 +68,7 @@ const repositories = [
     reviewCount: 5,
     ownerAvatarUrl: "http://38797.alserver18.com/userfiles/images/top-img.jpg",
   },
-];
+];*/
 
 const ItemSeparator = () => <View style={styles.separator} />;
 const ItemRenderer = ({ item }) => {
@@ -87,9 +88,23 @@ const ItemRenderer = ({ item }) => {
 };
 
 const RepositoryList = () => {
+  const { repositories } = useRepositories();
+
+  // Get the nodes from the edges array
+  const repositoryNodes = repositories
+    ? repositories.edges
+        .map((edge) => edge.node)
+        .map((val) => {
+          return {
+            ...val,
+            reviewCount: val.reviews.totalCount,
+          };
+        })
+    : [];
+
   return (
     <FlatList
-      data={repositories}
+      data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
       renderItem={ItemRenderer}
       style={styles.list}
