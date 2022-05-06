@@ -7,6 +7,9 @@ import {
 } from "react-native";
 import AppBarTab from "./AppBarTab";
 import Constants from "expo-constants";
+import useAuthStorage from "../hooks/useAuthStorage";
+import { useEffect, useState } from "react";
+import SignOutTab from "./SignOutTab";
 
 const styles = StyleSheet.create({
   container: {
@@ -22,11 +25,25 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+  const authStorage = useAuthStorage();
+  const [user, setUser] = useState("");
+
+  useEffect(async () => {
+    const token = await authStorage.getAccessToken();
+    if (token) {
+      setUser(token);
+    }
+  }, []);
+
   return (
     <View style={styles.container} onP>
       <ScrollView horizontal>
         <AppBarTab title={"Home"} link={"/"}></AppBarTab>
-        <AppBarTab title={"Sign In"} link={"/signIn"}></AppBarTab>
+        {user != "" ? (
+          <SignOutTab title={"Sign Out"}></SignOutTab>
+        ) : (
+          <AppBarTab title={"Sign In"} link={"/signIn"}></AppBarTab>
+        )}
       </ScrollView>
     </View>
   );

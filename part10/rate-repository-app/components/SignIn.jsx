@@ -3,6 +3,10 @@ import { Formik } from "formik";
 import FormikTextInput from "./FormikTextInput";
 import { StyleSheet } from "react-native";
 import * as yup from "yup";
+import { useSignIn } from "../hooks/useSignIn";
+import useAuthStorage from "../hooks/useAuthStorage";
+import { useNavigate } from "react-router-native";
+import { useApolloClient } from "@apollo/client";
 
 // yup validation
 const validationSchema = yup.object().shape({
@@ -56,8 +60,21 @@ const SignInForm = ({ onSubmit }) => {
 };
 
 const SignIn = () => {
-  const onSubmit = (values) => {
-    console.log(values.username, values.password);
+  const navigate = useNavigate();
+  const apolloClient = useApolloClient();
+  const authStorage = useAuthStorage();
+  const [signIn] = useSignIn();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+    try {
+      const { data } = await signIn({ username, password });
+      await authStorage.setAccessToken(data);
+      await apolloClient.resetStore();
+      navigate("/", { replace: true });
+    } catch (e) {
+      console.log("dumbass error", e);
+    }
   };
 
   return (
