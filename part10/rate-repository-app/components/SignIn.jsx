@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { useSignIn } from "../hooks/useSignIn";
 import useAuthStorage from "../hooks/useAuthStorage";
 import { useNavigate } from "react-router-native";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
 
 // yup validation
 const validationSchema = yup.object().shape({
@@ -71,8 +71,6 @@ const SignIn = ({ setUser }) => {
       const { data } = await signIn({ username, password });
       await authStorage.setAccessToken(data);
       await apolloClient.resetStore();
-      const userToken = authStorage.getAccessToken();
-      setUser(userToken);
       navigate("/", { replace: true });
     } catch (e) {
       console.log("dumbass error", e);

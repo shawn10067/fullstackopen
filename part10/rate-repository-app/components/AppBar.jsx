@@ -10,6 +10,8 @@ import Constants from "expo-constants";
 import useAuthStorage from "../hooks/useAuthStorage";
 import { useEffect } from "react";
 import SignOutTab from "./SignOutTab";
+import { useQuery } from "@apollo/client";
+import { getMe } from "../graphql/queries";
 
 const styles = StyleSheet.create({
   container: {
@@ -32,6 +34,13 @@ const AppBar = ({ setUser, user }) => {
       setUser(token);
     }
   }, []);
+
+  const { data, error, loading } = useQuery(getMe);
+  if (!loading) {
+    const obtainedUser = (data.me && data.me.username) || "";
+    console.log("getting me", obtainedUser);
+    setUser(obtainedUser);
+  }
 
   return (
     <View style={styles.container} onP>

@@ -22,3 +22,12 @@ export const repoGet = gql`
     }
   }
 `;
+
+export const getMe = gql`
+  query getMe {
+    me {
+      id
+      username
+    }
+  }
+`;

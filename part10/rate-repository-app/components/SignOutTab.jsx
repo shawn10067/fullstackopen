@@ -1,6 +1,7 @@
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
 import { Text, Pressable, StyleSheet } from "react-native";
 import useAuthStorage from "../hooks/useAuthStorage";
+import { getMe } from "../graphql/queries";
 
 const styles = StyleSheet.create({
   heading: {
@@ -19,7 +20,6 @@ const SignOutTab = ({ title, setUser }) => {
   const signOut = async () => {
     await authStorage.removeAccessToken();
     await apolloClient.resetStore();
-    setUser("");
   };
   return (
     <Pressable onPressOut={signOut}>
