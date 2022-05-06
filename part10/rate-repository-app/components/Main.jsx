@@ -3,15 +3,21 @@ import RepositoryList from "./RepositoryList";
 import AppBar from "./AppBar";
 import { Route, Routes, Navigate } from "react-router-native";
 import SignIn from "./SignIn";
+import { useState } from "react";
 
 const Main = () => {
+  const [user, setUser] = useState("");
   return (
     <View style={styles.container}>
-      <AppBar></AppBar>
+      <AppBar setUser={setUser} user={user}></AppBar>
       <Routes>
         <Route>
           <Route path="/" element={<RepositoryList />} exact />
-          <Route path="/signIn" element={<SignIn></SignIn>} exact />
+          <Route
+            path="/signIn"
+            element={<SignIn setUser={setUser}></SignIn>}
+            exact
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

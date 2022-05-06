@@ -13,12 +13,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const SignOutTab = ({ title }) => {
+const SignOutTab = ({ title, setUser }) => {
   const authStorage = useAuthStorage();
   const apolloClient = useApolloClient();
   const signOut = async () => {
     await authStorage.removeAccessToken();
     await apolloClient.resetStore();
+    setUser("");
   };
   return (
     <Pressable onPressOut={signOut}>

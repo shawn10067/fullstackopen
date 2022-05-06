@@ -8,7 +8,7 @@ import {
 import AppBarTab from "./AppBarTab";
 import Constants from "expo-constants";
 import useAuthStorage from "../hooks/useAuthStorage";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import SignOutTab from "./SignOutTab";
 
 const styles = StyleSheet.create({
@@ -24,10 +24,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppBar = () => {
+const AppBar = ({ setUser, user }) => {
   const authStorage = useAuthStorage();
-  const [user, setUser] = useState("");
-
   useEffect(async () => {
     const token = await authStorage.getAccessToken();
     if (token) {
@@ -40,7 +38,7 @@ const AppBar = () => {
       <ScrollView horizontal>
         <AppBarTab title={"Home"} link={"/"}></AppBarTab>
         {user != "" ? (
-          <SignOutTab title={"Sign Out"}></SignOutTab>
+          <SignOutTab title={"Sign Out"} setUser={setUser}></SignOutTab>
         ) : (
           <AppBarTab title={"Sign In"} link={"/signIn"}></AppBarTab>
         )}

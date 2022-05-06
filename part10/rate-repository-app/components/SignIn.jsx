@@ -59,7 +59,7 @@ const SignInForm = ({ onSubmit }) => {
   );
 };
 
-const SignIn = () => {
+const SignIn = ({ setUser }) => {
   const navigate = useNavigate();
   const apolloClient = useApolloClient();
   const authStorage = useAuthStorage();
@@ -71,6 +71,8 @@ const SignIn = () => {
       const { data } = await signIn({ username, password });
       await authStorage.setAccessToken(data);
       await apolloClient.resetStore();
+      const userToken = authStorage.getAccessToken();
+      setUser(userToken);
       navigate("/", { replace: true });
     } catch (e) {
       console.log("dumbass error", e);
