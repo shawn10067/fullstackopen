@@ -87,10 +87,16 @@ const ItemRenderer = ({ item }) => {
   );
 };
 
-const RepositoryList = () => {
-  const { repositories } = useRepositories();
-
+export const RepositoryListContainer = ({ repositories }) => {
   // Get the nodes from the edges array
+
+  // For test runs
+  const repositoryNodes = repositories
+    ? repositories.edges.map((edge) => edge.node)
+    : [];
+
+  // For the final product
+  /*
   const repositoryNodes = repositories
     ? repositories.edges
         .map((edge) => edge.node)
@@ -101,6 +107,7 @@ const RepositoryList = () => {
           };
         })
     : [];
+    */
 
   return (
     <FlatList
@@ -110,6 +117,12 @@ const RepositoryList = () => {
       style={styles.list}
     />
   );
+};
+
+const RepositoryList = () => {
+  const { repositories } = useRepositories();
+
+  return <RepositoryListContainer repositories={repositories} />;
 };
 
 export default RepositoryList;

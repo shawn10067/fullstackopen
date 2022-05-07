@@ -74,7 +74,7 @@ const RepositoryItem = ({
   imageURL,
 }) => {
   return (
-    <View key={id} style={styles.item}>
+    <View key={id} style={styles.item} testID="repositoryItem">
       <View style={styles.displayView}>
         <View style={{ borderRadius: 10 }}>
           <Image style={styles.picture} source={{ uri: imageURL }}></Image>
@@ -87,6 +87,7 @@ const RepositoryItem = ({
               fontSize: 20,
               margin: 4,
             }}
+            testID="repositoryItemName"
           >
             {fullName}
           </Text>
@@ -101,6 +102,7 @@ const RepositoryItem = ({
                   color: "white",
                   margin: 4,
                 }}
+                testID="repositoryItemLanguage"
               >
                 {language}
               </Text>
@@ -109,7 +111,7 @@ const RepositoryItem = ({
         </View>
       </View>
       <View>
-        <View style={styles.otherContentView}>
+        <View style={styles.otherContentView} testID="repositoryItemAttr">
           <View style={styles.attributeView}>
             <Text style={styles.subHeadingAtr}>
               {stargazersCount > 1000
