@@ -19,7 +19,27 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
   },
+  review: {
+    display: "flex",
+  },
+  numberReview: {
+    fontSize: 20,
+    color: "navy",
+    flexGrow: 1,
+  },
+  reviewContent: {
+    flexGrow: 3,
+  },
 });
+
+const ReviewItem = ({ review }) => {
+  <View>
+    <View>
+      <Text>Score</Text>
+    </View>
+    <View></View>
+  </View>;
+};
 
 const SingleRepository = () => {
   const [repoInfo, setRepoInfo] = useState();
