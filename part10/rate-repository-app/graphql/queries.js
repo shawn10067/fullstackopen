@@ -45,6 +45,18 @@ export const getSingleRep = gql`
       ratingAverage
       reviews {
         totalCount
+        edges {
+          node {
+            id
+            text
+            rating
+            createdAt
+            user {
+              id
+              username
+            }
+          }
+        }
       }
       ownerAvatarUrl
       stargazersCount
@@ -52,4 +64,21 @@ export const getSingleRep = gql`
       url
     }
   }
+`;
+
+`
+reviews {
+  edges {
+    node {
+      id
+      text
+      rating
+      createdAt
+      user {
+        id
+        username
+      }
+    }
+  }
+}
 `;
