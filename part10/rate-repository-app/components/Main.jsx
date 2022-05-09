@@ -4,6 +4,7 @@ import AppBar from "./AppBar";
 import { Route, Routes, Navigate } from "react-router-native";
 import SignIn from "./SignIn";
 import { useState } from "react";
+import SingleRepository from "./SingleRepositoryView";
 
 const Main = () => {
   const [user, setUser] = useState("");
@@ -19,6 +20,10 @@ const Main = () => {
             exact
           />
           <Route path="*" element={<Navigate to="/" replace />} />
+          <Route
+            path="/singleRepo/:id"
+            element={<SingleRepository></SingleRepository>}
+          />
         </Route>
       </Routes>
     </View>

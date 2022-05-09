@@ -9,7 +9,6 @@ import {
 
 const styles = StyleSheet.create({
   item: {
-    margin: 5,
     padding: 10,
     backgroundColor: "white",
     width: Dimensions.get("window").width * 0.9,

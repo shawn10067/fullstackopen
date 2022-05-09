@@ -1,7 +1,6 @@
 import "@testing-library/jest-native/extend-expect";
 import { render, toHaveTextContent } from "@testing-library/react-native";
 import { RepositoryListContainer } from "../components/RepositoryList";
-import { within } from "@testing-library/dom";
 
 describe("RepositoryList", () => {
   describe("RepositoryListContainer", () => {
@@ -48,7 +47,7 @@ describe("RepositoryList", () => {
           },
         ],
       };
-      const { getByPlaceholderText, getByText, getAllByTestId, debug } = render(
+      const { getAllByTestId } = render(
         <RepositoryListContainer
           repositories={repositories}
         ></RepositoryListContainer>
