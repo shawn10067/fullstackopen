@@ -16,7 +16,6 @@ import { parseISO } from "date-fns";
 const styles = StyleSheet.create({
   mainView: {
     margin: 10,
-    flex: 1,
   },
   openButton: {
     alignSelf: "center",
@@ -39,25 +38,31 @@ const styles = StyleSheet.create({
     display: "flex",
     width: "91%",
     flexDirection: "row",
-    alignContent: "flex-end",
-    justifyContent: "flex-end",
     alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
   numberReview: {
-    flexGrow: 1,
+    height: 100,
+    width: 100,
+    margin: 7,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
   },
   numberReviewText: {
-    padding: 20,
-    textAlignVertical: "bottom",
-    alignSelf: "center",
-    justifyContent: "center",
-    textAlign: "center",
+    height: 100,
+    width: 100,
+    padding: 10,
     fontSize: 25,
     color: "skyblue",
     borderRadius: "50%",
     borderColor: "lightblue",
     borderWidth: 5,
+    fontWeight: "bold",
+    lineHeight: 65,
+    textAlign: "center",
   },
   reviewContent: {
     width: "90%",
@@ -146,6 +151,7 @@ const SingleRepository = () => {
   const { id } = useParams();
 
   // getting the url query data
+  console.log("using id", id);
   const { data, error, loading } = useQuery(getSingleRep, {
     variables: {
       userId: id,
@@ -154,7 +160,7 @@ const SingleRepository = () => {
 
   if (!loading && !done) {
     setDone(true);
-    console.log(data.repository);
+    console.log("data", data);
     setRepoInfo(data.repository);
     const gotReviews = data.repository.reviews.edges.map((val) => val.node);
     console.log(gotReviews);

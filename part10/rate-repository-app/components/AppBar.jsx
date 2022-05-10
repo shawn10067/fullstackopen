@@ -47,10 +47,16 @@ const AppBar = ({ setUser, user }) => {
       <ScrollView horizontal>
         <AppBarTab title={"Home"} link={"/"}></AppBarTab>
         {user != "" ? (
+          <AppBarTab title={"Create Review"} link={"/createReview"}></AppBarTab>
+        ) : null}
+        {user != "" ? (
           <SignOutTab title={"Sign Out"} setUser={setUser}></SignOutTab>
         ) : (
           <AppBarTab title={"Sign In"} link={"/signIn"}></AppBarTab>
         )}
+        {user == "" ? (
+          <AppBarTab title={"Sign Up"} link={"/signUp"}></AppBarTab>
+        ) : null}
       </ScrollView>
     </View>
   );

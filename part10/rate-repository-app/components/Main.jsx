@@ -5,6 +5,8 @@ import { Route, Routes, Navigate } from "react-router-native";
 import SignIn from "./SignIn";
 import { useState } from "react";
 import SingleRepository from "./SingleRepositoryView";
+import CreateReview from "./CreateReview";
+import SignUp from "./SignUp";
 
 const Main = () => {
   const [user, setUser] = useState("");
@@ -20,10 +22,12 @@ const Main = () => {
             exact
           />
           <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/createReview" element={<CreateReview></CreateReview>} />
           <Route
             path="/singleRepo/:id"
             element={<SingleRepository></SingleRepository>}
           />
+          <Route path="/signUp" element={<SignUp></SignUp>} />
         </Route>
       </Routes>
     </View>
