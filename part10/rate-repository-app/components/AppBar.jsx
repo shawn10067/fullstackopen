@@ -37,6 +37,7 @@ const AppBar = ({ setUser, user }) => {
 
   const { data, error, loading } = useQuery(getMe);
   if (!loading) {
+    console.log(data);
     const obtainedUser = (data.me && data.me.username) || "";
     console.log("getting me", obtainedUser);
     setUser(obtainedUser);

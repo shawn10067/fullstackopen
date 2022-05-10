@@ -26,12 +26,14 @@
     "expo-status-bar": "~1.2.0",
     "formik": "^2.2.9",
     "graphql": "^16.4.0",
-    "react": "17.0.1",
+    "react": "^17.0.1",
     "react-devtools": "^4.24.4",
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
+    "react-native-paper": "^4.12.1",
     "react-native-web": "0.17.1",
     "react-router-native": "^6.3.0",
+    "use-debounce": "^8.0.1",
     "yup": "^0.32.11"
   },
   "jest": {
