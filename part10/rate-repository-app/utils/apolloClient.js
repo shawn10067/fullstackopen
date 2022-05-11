@@ -7,6 +7,7 @@ const httpLink = createHttpLink({
 });
 
 const createApolloClient = (authStorage) => {
+  console.log(Constants.manifest.extra.env.APOLLO_URI);
   const authLink = setContext(async (_, { headers }) => {
     try {
       const accessToken = await authStorage.getAccessToken();
@@ -17,7 +18,7 @@ const createApolloClient = (authStorage) => {
         },
       };
     } catch (e) {
-      console.log(e);
+      console.log("network error", e);
       return { headers };
     }
   });

@@ -22,7 +22,7 @@ const validationSchema = yup.object().shape({
 const initialValues = {
   repositoryName: "",
   ownerName: "",
-  rating: 0,
+  rating: "0",
   text: "",
 };
 
@@ -55,7 +55,7 @@ export const CreateReviewForm = ({ onSubmit }) => {
     >
       <FormikTextInput name="repositoryName" placeholder="repository" />
       <FormikTextInput name="ownerName" placeholder="owner" />
-      <FormikTextInput name="rating" placeholder={0} />
+      <FormikTextInput name="rating" placeholder={"0"} />
       <FormikTextInput name="text" placeholder={"text"} multiline />
       <Pressable onPress={onSubmit} style={styles.submitButton}>
         <Text style={styles.submitButtonText}>Submit</Text>

@@ -11,7 +11,6 @@ const authStorage = new AuthStorage();
 const apolloClient = createApolloClient(authStorage);
 
 export default function App() {
-  console.log("manifest", Constants.manifest);
   return (
     <ApolloProvider client={apolloClient}>
       <AuthStorageContext.Provider value={authStorage}>

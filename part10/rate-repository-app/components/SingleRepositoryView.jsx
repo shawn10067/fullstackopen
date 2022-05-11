@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 25,
     color: "skyblue",
-    borderRadius: "50%",
+    borderRadius: 100 / 2,
     borderColor: "lightblue",
     borderWidth: 5,
     fontWeight: "bold",

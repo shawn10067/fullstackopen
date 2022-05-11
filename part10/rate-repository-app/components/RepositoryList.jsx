@@ -5,7 +5,7 @@ import useRepositories from "../utils/UseRepositories";
 import RepositoryItem from "./RepositoryItem";
 import { Menu, Button, Searchbar } from "react-native-paper";
 import { useState } from "react";
-import { useDebounce } from "use-debounce";
+import { useDebouncedCallback } from "use-debounce";
 
 const styles = StyleSheet.create({
   separator: {
@@ -16,66 +16,12 @@ const styles = StyleSheet.create({
   },
 });
 
-/*
-const SortMenu = ({ setOrder, setDirection, refetch, setDone }) => {
-  const [visible, setVisible] = useState(false);
-  const openMenu = () => setVisible(true);
-  const closeMenu = () => setVisible(false);
-
-  return (
-    <Menu
-      visible={visible}
-      onDismiss={closeMenu}
-      anchor={<Button onPress={openMenu}>Show menu</Button>}
-    >
-      <Menu.Item
-        title="Latest Repositories"
-        onPress={() => {
-          setOrder("CREATED_AT");
-          setDirection("DESC");
-          setDone(false);
-          refetch({
-            orderBy: "CREATED_AT",
-            orderDirection: "DESC",
-          });
-        }}
-      ></Menu.Item>
-      <Menu.Item
-        title="Highest Rated"
-        onPress={() => {
-          setOrder("RATING_AVERAGE");
-          setDirection("DESC");
-          setDone(false);
-          refetch({
-            orderBy: "RATING_AVERAGE",
-            orderDirection: "DESC",
-          });
-        }}
-      ></Menu.Item>
-      <Menu.Item
-        title="Lowest Rated"
-        onPress={() => {
-          setOrder("RATING_AVERAGE");
-          setDirection("ASC");
-          setDone(false);
-          refetch({
-            orderBy: "RATING_AVERAGE",
-            orderDirection: "ASC",
-          });
-        }}
-      ></Menu.Item>
-    </Menu>
-  );
-};
-*/
-
 export class RepositoryListContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       visible: false,
       input: "",
-      value: "",
     };
   }
 
@@ -86,26 +32,28 @@ export class RepositoryListContainer extends React.Component {
     });
   };
 
-  setInput = (text) => {
+  setText = (val) => {
     this.setState({
       ...this.state,
-      input: text,
+      input: val,
     });
   };
 
   renderHeader = () => {
-    const { setDirection, setOrder, setDone, refetch } = this.props;
+    const { setDirection, setOrder, setDone, refetch, debounced } = this.props;
     const openMenu = () => this.setVisible(true);
     const closeMenu = () => this.setVisible(false);
 
     return (
       <View>
         <Searchbar
-          value=""
+          value={this.state.input}
           placeholder="Search"
           onChangeText={(text) => {
-            this.props.setSearchTerm(text);
+            this.setText(text);
+            debounced(text);
           }}
+          style={{ width: "100%" }}
         ></Searchbar>
         <Menu
           visible={this.state.visible}
@@ -118,10 +66,6 @@ export class RepositoryListContainer extends React.Component {
               setOrder("CREATED_AT");
               setDirection("DESC");
               setDone(false);
-              refetch({
-                orderBy: "CREATED_AT",
-                orderDirection: "DESC",
-              });
             }}
           ></Menu.Item>
           <Menu.Item
@@ -130,10 +74,6 @@ export class RepositoryListContainer extends React.Component {
               setOrder("RATING_AVERAGE");
               setDirection("DESC");
               setDone(false);
-              refetch({
-                orderBy: "RATING_AVERAGE",
-                orderDirection: "DESC",
-              });
             }}
           ></Menu.Item>
           <Menu.Item
@@ -154,9 +94,7 @@ export class RepositoryListContainer extends React.Component {
   };
 
   render() {
-    const { repositories } = this.props;
-    // Get the nodes from the edges array
-
+    const { repositories, onEndReach } = this.props;
     // For test runs
     //const repositoryNodes = repositories
     //  ? repositories.edges.map((edge) => edge.node)
@@ -174,7 +112,6 @@ export class RepositoryListContainer extends React.Component {
       : [];
     const ItemSeparator = () => <View style={styles.separator} />;
     const ItemRenderer = ({ item }) => {
-      console.log(item.id);
       return (
         <Pressable
           onPress={() =>
@@ -207,104 +144,32 @@ export class RepositoryListContainer extends React.Component {
         renderItem={ItemRenderer}
         style={styles.list}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.01}
       />
     );
   }
 }
 
-/*
-export const RepositoryListContainer = ({
-  repositories,
-  setDirection,
-  setOrder,
-  refetch,
-  setDone,
-}) => {
-  const navigator = useNavigate();
-  // Get the nodes from the edges array
-  
-  // For test runs
-  //const repositoryNodes = repositories
-  //  ? repositories.edges.map((edge) => edge.node)
-  //  : [];
-  
-
-  const repositoryNodes = repositories
-    ? repositories.edges
-        .map((edge) => edge.node)
-        .map((val) => {
-          return {
-            ...val,
-            reviewCount: val.reviews.totalCount,
-          };
-        })
-    : [];
-  const ItemSeparator = () => <View style={styles.separator} />;
-  const ItemRenderer = ({ item }) => {
-    console.log(item.id);
-    return (
-      <Pressable
-        onPress={() => navigator(`/singleRepo/${item.id}`, { replace: true })}
-      >
-        <View style={{ margin: 5 }}>
-          <RepositoryItem
-            id={item.id}
-            fullName={item.fullName}
-            description={item.description}
-            language={item.language}
-            forksCount={item.forksCount}
-            stargazersCount={item.stargazersCount}
-            ratingAverage={item.ratingAverage}
-            reviewCount={item.reviewCount}
-            imageURL={item.ownerAvatarUrl}
-          />
-        </View>
-      </Pressable>
-    );
-  };
-
-  return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={ItemRenderer}
-      style={styles.list}
-      ListHeaderComponent={() => {
-        return (
-          <SortMenu
-            setOrder={setOrder}
-            setDirection={setDirection}
-            refetch={refetch}
-            setDone={setDone}
-          ></SortMenu>
-        );
-      }}
-    />
-  );
-};
-
-*/
 const RepositoryList = () => {
-  console.log("restarted list");
   const navigation = useNavigate();
   const [order, setOrder] = useState("CREATED_AT");
   const [direction, setDirection] = useState("DESC");
   const [searchTerm, setSearchTerm] = useState("");
-  const [value] = useDebounce(searchTerm, 500);
   const { repositories, refetch, setDone } = useRepositories({
     order,
     direction,
+    searchTerm,
   });
 
-  let prevValue = value;
+  const onEndReach = () => {
+    console.log("You have reached the end of the list");
+  };
 
-  setInterval(() => {
-    if (prevValue !== value) {
-      refetch({
-        searchKeyword: searchTerm,
-      });
-    }
-    prevValue = value;
+  // Debounce callback
+  const debounced = useDebouncedCallback((value) => {
+    setSearchTerm(value);
+    setDone(false);
   }, 500);
 
   return (
@@ -315,8 +180,8 @@ const RepositoryList = () => {
       refetch={refetch}
       setDone={setDone}
       navigation={navigation}
-      value={value}
-      setSearchTerm={setSearchTerm}
+      debounced={debounced}
+      onEndReach={onEndReach}
     />
   );
 };

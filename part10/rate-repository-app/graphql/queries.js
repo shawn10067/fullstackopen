@@ -2,9 +2,9 @@ import { gql } from "@apollo/client";
 
 export const repoGet = gql`
   query getRep(
-    $orderBy: AllRepositoriesOrderBy
-    $orderDirection: OrderDirection
-    $searchKeyword: String
+    $orderBy: AllRepositoriesOrderBy!
+    $orderDirection: OrderDirection!
+    $searchKeyword: String!
   ) {
     repositories(
       orderBy: $orderBy
