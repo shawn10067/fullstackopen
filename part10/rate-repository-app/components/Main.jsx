@@ -13,24 +13,6 @@ import { getMe } from "../graphql/queries";
 
 const Main = () => {
   const [user, setUser] = useState("");
-  const [done, setDone] = useState("");
-
-  const authStorage = useAuthStorage();
-  useEffect(async () => {
-    const token = await authStorage.getAccessToken();
-    if (token) {
-      setUser(token);
-    }
-  }, []);
-
-  const { data, error, loading } = useQuery(getMe);
-  if (!loading && !done) {
-    console.log(data);
-    const obtainedUser = (data.me && data.me.username) || "";
-    console.log("getting me", obtainedUser);
-    setUser(obtainedUser);
-    setDone(true);
-  }
 
   return (
     <View style={styles.container}>

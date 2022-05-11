@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = ({ setUser, user }) => {
-  /*
   const authStorage = useAuthStorage();
   useEffect(async () => {
     const token = await authStorage.getAccessToken();
@@ -42,9 +41,7 @@ const AppBar = ({ setUser, user }) => {
     const obtainedUser = (data.me && data.me.username) || "";
     console.log("getting me", obtainedUser);
     setUser(obtainedUser);
-
   }
-  */
 
   return (
     <View style={styles.container} onP>
