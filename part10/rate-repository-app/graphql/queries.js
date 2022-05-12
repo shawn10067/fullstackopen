@@ -5,11 +5,15 @@ export const repoGet = gql`
     $orderBy: AllRepositoriesOrderBy!
     $orderDirection: OrderDirection!
     $searchKeyword: String!
+    $first: Int!
+    $after: String
   ) {
     repositories(
       orderBy: $orderBy
       orderDirection: $orderDirection
       searchKeyword: $searchKeyword
+      first: $first
+      after: $after
     ) {
       edges {
         node {
@@ -28,6 +32,11 @@ export const repoGet = gql`
           language
         }
       }
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
+      }
     }
   }
 `;
@@ -42,7 +51,7 @@ export const getMe = gql`
 `;
 
 export const getSingleRep = gql`
-  query getSingleRep($userId: ID!) {
+  query getSingleRep($userId: ID!, $after: String, $first: Int) {
     repository(id: $userId) {
       id
       description
@@ -51,7 +60,7 @@ export const getSingleRep = gql`
       forksCount
       watchersCount
       ratingAverage
-      reviews {
+      reviews(first: $first, after: $after) {
         totalCount
         edges {
           node {
@@ -65,6 +74,11 @@ export const getSingleRep = gql`
             }
           }
         }
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
+        }
       }
       ownerAvatarUrl
       stargazersCount
@@ -72,21 +86,4 @@ export const getSingleRep = gql`
       url
     }
   }
-`;
-
-`
-reviews {
-  edges {
-    node {
-      id
-      text
-      rating
-      createdAt
-      user {
-        id
-        username
-      }
-    }
-  }
-}
 `;

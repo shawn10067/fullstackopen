@@ -16,6 +16,7 @@ import { parseISO } from "date-fns";
 const styles = StyleSheet.create({
   mainView: {
     margin: 10,
+    flex: 1,
   },
   openButton: {
     alignSelf: "center",
@@ -152,35 +153,63 @@ const SingleRepository = () => {
 
   // getting the url query data
   console.log("using id", id);
-  const { data, error, loading } = useQuery(getSingleRep, {
+  const { data, error, loading, fetchMore } = useQuery(getSingleRep, {
     variables: {
       userId: id,
+      first: 2,
     },
   });
 
+  const handleFetchMoreComments = () => {
+    const canFetchMore =
+      !loading && data?.repository.reviews.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      console.log("cant fetch more");
+      return;
+    }
+
+    console.log("can fetch more");
+    fetchMore({
+      variables: {
+        after: data.repository.reviews.pageInfo.endCursor,
+        userId: id,
+        first: 2,
+      },
+    });
+  };
+
+  const onEndReach = () => {
+    console.log("reached end of comments");
+    handleFetchMoreComments();
+  };
+
   if (!loading && !done) {
     setDone(true);
-    console.log("data", data);
+    //console.log("data", data);
     setRepoInfo(data.repository);
     const gotReviews = data.repository.reviews.edges.map((val) => val.node);
-    console.log(gotReviews);
+    // console.log(gotReviews);
     setReviews(gotReviews);
   }
 
   if (repoInfo) {
     return (
-      <View style={styles.mainView}>
-        <FlatList
-          style={{
+      <FlatList
+        style={[
+          {
             display: "flex",
             flexDirection: "column",
-          }}
-          data={reviews}
-          renderItem={({ item }) => <ReviewItem review={item} />}
-          keyExtractor={({ id }) => id}
-          ListHeaderComponent={() => <RepositoryInfo repository={repoInfo} />}
-        />
-      </View>
+            margin: 10,
+          },
+        ]}
+        data={reviews}
+        renderItem={({ item }) => <ReviewItem review={item} />}
+        keyExtractor={({ id }) => id}
+        ListHeaderComponent={() => <RepositoryInfo repository={repoInfo} />}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
+      />
     );
   } else {
     return <></>;

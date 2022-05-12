@@ -145,7 +145,7 @@ export class RepositoryListContainer extends React.Component {
         style={styles.list}
         ListHeaderComponent={this.renderHeader}
         onEndReached={onEndReach}
-        onEndReachedThreshold={0.01}
+        onEndReachedThreshold={0.5}
       />
     );
   }
@@ -156,14 +156,15 @@ const RepositoryList = () => {
   const [order, setOrder] = useState("CREATED_AT");
   const [direction, setDirection] = useState("DESC");
   const [searchTerm, setSearchTerm] = useState("");
-  const { repositories, refetch, setDone } = useRepositories({
+  const { repositories, refetch, setDone, fetchMore } = useRepositories({
     order,
     direction,
     searchTerm,
   });
 
   const onEndReach = () => {
-    console.log("You have reached the end of the list");
+    console.log("end reached");
+    fetchMore();
   };
 
   // Debounce callback
