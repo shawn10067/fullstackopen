@@ -58,6 +58,7 @@ export const getMe = gql`
               id
               username
             }
+            repositoryId
           }
         }
         pageInfo {
