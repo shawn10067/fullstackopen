@@ -51,6 +51,9 @@ const AppBar = ({ setUser, user }) => {
           <AppBarTab title={"Create Review"} link={"/createReview"}></AppBarTab>
         ) : null}
         {user != "" ? (
+          <AppBarTab title={"Reviews"} link={"/myReviews"}></AppBarTab>
+        ) : null}
+        {user != "" ? (
           <SignOutTab title={"Sign Out"} setUser={setUser}></SignOutTab>
         ) : (
           <AppBarTab title={"Sign In"} link={"/signIn"}></AppBarTab>

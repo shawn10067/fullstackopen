@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import SingleRepository from "./SingleRepositoryView";
 import CreateReview from "./CreateReview";
 import SignUp from "./SignUp";
+import UserReviews from "./UserReviews";
 import useAuthStorage from "../hooks/useAuthStorage";
 import { useQuery } from "@apollo/client";
 import { getMe } from "../graphql/queries";
@@ -18,21 +19,20 @@ const Main = () => {
     <View style={styles.container}>
       <AppBar setUser={setUser} user={user}></AppBar>
       <Routes>
-        <Route>
-          <Route path="/" element={<RepositoryList />} exact />
-          <Route
-            path="/signIn"
-            element={<SignIn setUser={setUser}></SignIn>}
-            exact
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-          <Route path="/createReview" element={<CreateReview></CreateReview>} />
-          <Route
-            path="/singleRepo/:id"
-            element={<SingleRepository></SingleRepository>}
-          />
-          <Route path="/signUp" element={<SignUp></SignUp>} />
-        </Route>
+        <Route path="/myReviews" element={<UserReviews></UserReviews>} />
+        <Route path="/" element={<RepositoryList />} exact />
+        <Route
+          path="/signIn"
+          element={<SignIn setUser={setUser}></SignIn>}
+          exact
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/createReview" element={<CreateReview></CreateReview>} />
+        <Route
+          path="/singleRepo/:id"
+          element={<SingleRepository></SingleRepository>}
+        />
+        <Route path="/signUp" element={<SignUp></SignUp>} />
       </Routes>
     </View>
   );

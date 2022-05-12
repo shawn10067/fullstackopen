@@ -42,10 +42,30 @@ export const repoGet = gql`
 `;
 
 export const getMe = gql`
-  query getMe {
+  query me($includeReviews: Boolean = false) {
     me {
-      id
       username
+      id
+      reviews @include(if: $includeReviews) {
+        totalCount
+        edges {
+          node {
+            id
+            text
+            rating
+            createdAt
+            user {
+              id
+              username
+            }
+          }
+        }
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
+        }
+      }
     }
   }
 `;

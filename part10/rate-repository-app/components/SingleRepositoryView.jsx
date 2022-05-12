@@ -128,7 +128,7 @@ const RepositoryInfo = ({ repository }) => {
   );
 };
 
-const ReviewItem = ({ review }) => {
+export const ReviewItem = ({ review }) => {
   const parsedDate = parseISO(review.createdAt);
   const date = parsedDate.toDateString();
   return (
@@ -169,7 +169,7 @@ const SingleRepository = () => {
       return;
     }
 
-    console.log("can fetch more");
+    console.log("can fetch more", id);
     fetchMore({
       variables: {
         after: data.repository.reviews.pageInfo.endCursor,
@@ -186,12 +186,14 @@ const SingleRepository = () => {
 
   if (!loading && !done) {
     setDone(true);
-    //console.log("data", data);
+    console.log("data", data);
     setRepoInfo(data.repository);
-    const gotReviews = data.repository.reviews.edges.map((val) => val.node);
+    //const gotReviews = data.repository.reviews.edges.map((val) => val.node);
     // console.log(gotReviews);
     setReviews(gotReviews);
   }
+
+  const gotReviews = data?.repository.reviews.edges.map((val) => val.node);
 
   if (repoInfo) {
     return (
@@ -203,7 +205,7 @@ const SingleRepository = () => {
             margin: 10,
           },
         ]}
-        data={reviews}
+        data={gotReviews}
         renderItem={({ item }) => <ReviewItem review={item} />}
         keyExtractor={({ id }) => id}
         ListHeaderComponent={() => <RepositoryInfo repository={repoInfo} />}

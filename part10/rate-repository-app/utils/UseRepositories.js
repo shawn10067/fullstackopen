@@ -26,7 +26,6 @@ const useRepositories = (variables) => {
       return;
     }
 
-    console.log("can fetch more", data.repositories.pageInfo.endCursor);
     fetchMore({
       variables: {
         after: data.repositories.pageInfo.endCursor,
@@ -40,13 +39,13 @@ const useRepositories = (variables) => {
   }
 
   if (!loading && !done) {
-    console.log("done fetching");
+    //console.log("done fetching");
     setRepositories(data.repositories);
-    console.log("repositories from repoGET", data);
+    //console.log("repositories from repoGET", data);
     setDone(true);
   }
 
-  console.log(setDone);
+  //console.log(setDone);
 
   return {
     setDone,
