@@ -28,10 +28,10 @@ blogRouter.delete("/:id", async (req, res) => {
     // destroying it
     await foundBlog.destroy();
 
-    return res.status(204);
+    return res.sendStatus(204);
   } catch (error) {
     console.log(error);
-    res.status(400).json(error);
+    res.status(400).json({ error });
   }
 });
 
