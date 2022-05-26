@@ -1,9 +1,11 @@
-const Blog = require("./Models/blog");
-const sequelize = require("./utils/sequelize");
 const express = require("express");
-const blogRouter = require("./Controllers/blog");
 const app = express();
+const blogRouter = require("./controllers/blog");
+const { PORT } = require("./utils/config");
+const { connectToDatabase } = require("./utils/db");
 
+// main use blocks
+app.use(express.json());
 app.use("/blogs", blogRouter);
 
 /*
@@ -28,8 +30,11 @@ const main = async () => {
 main();
 */
 
-const PORT = process.env.PORT || 3001;
+const start = async () => {
+  await connectToDatabase();
+  app.listen(PORT, () => {
+    console.log(`Server listening on ${PORT}`);
+  });
+};
 
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-});
+start();
