@@ -11,37 +11,34 @@ blogRouter.get("/", async (_, res) => {
 });
 
 blogRouter.post("/", async (req, res) => {
-  try {
-    // getting the blog
-    const blog = await Blog.create(req.body);
-    return res.json(blog);
-  } catch (error) {
-    res.status(400).json(error);
-  }
+  // getting the blog
+  const blog = await Blog.create(req.body);
+  return res.json(blog);
 });
 
 // ID helper
 const blogFinder = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    req.blog = await Blog.findByPk(Number(id));
-    next();
-  } catch (error) {
-    console.error(error);
-    return res.json({ error });
-  }
+  const { id } = req.params;
+  req.blog = await Blog.findByPk(Number(id));
+  next();
 };
 
 // the ID routes
 blogRouter.delete("/:id", blogFinder, async (req, res) => {
-  try {
-    if (req.blog) {
-      await req.blog.destroy();
-    }
-    return res.sendStatus(204);
-  } catch (error) {
-    console.error(error);
-    return res.json({ error });
+  if (req.blog) {
+    await req.blog.destroy();
+  }
+  return res.sendStatus(204);
+});
+
+blogRouter.put("/:id", blogFinder, async (req, res) => {
+  if (req.blog && req.body.likes) {
+    const { blog } = req;
+    blog.likes = req.body.likes;
+    await blog.save();
+    return res.status(200).json({ blog });
+  } else {
+    throw new Error("Wrong Id Dipshit");
   }
 });
 

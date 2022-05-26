@@ -1,4 +1,5 @@
 const express = require("express");
+require("express-async-errors");
 const app = express();
 const blogRouter = require("./controllers/blog");
 const { PORT } = require("./utils/config");
@@ -8,27 +9,13 @@ const { connectToDatabase } = require("./utils/db");
 app.use(express.json());
 app.use("/blogs", blogRouter);
 
-/*
-const main = async () => {
-  try {
-    // connecting
-    await sequelize.authenticate();
-    console.log("Connection made");
-
-    // adding blogs
-
-    const blogs = (await Blog.findAll()).map((blog) => blog.toJSON());
-    JSON.stringify({}, null);
-
-    blogs.forEach((blog) =>
-      console.log(`${blog.author}: ${blog.title}, ${blog.likes} likes`)
-    );
-  } catch (error) {
-    console.log("Error connecting", error);
-  }
+// error router
+const errorHandler = (error, _, response, next) => {
+  console.error(error);
+  response.status(400).json({ error: error.message });
+  next(error);
 };
-main();
-*/
+app.use(errorHandler);
 
 const start = async () => {
   await connectToDatabase();
