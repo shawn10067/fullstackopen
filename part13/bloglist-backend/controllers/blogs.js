@@ -2,29 +2,37 @@ const Blog = require("../models/blog");
 const express = require("express");
 const blogRouter = express.Router();
 
+// getting middleware
+const { blogFinder, tokenExtractor } = require("../middleware");
+
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+
 // the main get routes
 
 blogRouter.get("/", async (_, res) => {
   // getting all blogs
-  const blogs = await Blog.findAll();
+  const blogs = await Blog.findAll({
+    include: {
+      model: User,
+    },
+  });
   return res.json(blogs);
 });
 
-blogRouter.post("/", async (req, res) => {
+blogRouter.post("/", tokenExtractor, async (req, res) => {
+  const user = await User.findByPk(req.decodedToken.id);
   // getting the blog
-  const blog = await Blog.create(req.body);
+  console.log(user, req.body);
+  const blog = await Blog.create({
+    ...req.body,
+    userId: Number(user.id),
+  });
   return res.json(blog);
 });
 
-// ID helper
-const blogFinder = async (req, res, next) => {
-  const { id } = req.params;
-  req.blog = await Blog.findByPk(Number(id));
-  next();
-};
-
 // the ID routes
-blogRouter.delete("/:id", blogFinder, async (req, res) => {
+blogRouter.delete("/:id", [tokenExtractor, blogFinder], async (req, res) => {
   if (req.blog) {
     await req.blog.destroy();
   }
@@ -38,7 +46,7 @@ blogRouter.put("/:id", blogFinder, async (req, res) => {
     await blog.save();
     return res.status(200).json({ blog });
   } else {
-    throw new Error("Wrong Id Dipshit");
+    throw new Error("Incorrect id");
   }
 });
 
