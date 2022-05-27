@@ -1,11 +1,15 @@
-const User = require("../models/user");
+const { User } = require("../models/index");
 const express = require("express");
-const Blog = require("../models/blog");
+const { Blog } = require("../models/index");
 const userRouter = express.Router();
 
 // main user retrival
 userRouter.get("/", async (req, res) => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    include: {
+      model: Blog,
+    },
+  });
   res.status(200).json(users);
 });
 
