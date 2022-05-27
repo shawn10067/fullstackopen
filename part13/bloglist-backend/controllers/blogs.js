@@ -1,4 +1,4 @@
-const Blog = require("../models/blog");
+const { Blog } = require("../models/index");
 const express = require("express");
 const blogRouter = express.Router();
 
@@ -31,10 +31,10 @@ blogRouter.get("/", async (_, res) => {
 blogRouter.post("/", tokenExtractor, async (req, res) => {
   const user = await User.findByPk(req.decodedToken.id);
   // getting the blog
-  console.log(user, req.body);
+  console.log(user.id, req.body);
   const blog = await Blog.create({
     ...req.body,
-    userId: Number(user.id),
+    userId: user.id,
   });
   return res.json(blog);
 });
