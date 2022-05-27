@@ -8,10 +8,7 @@ const { usernameExtractor } = require("../middleware");
 userRouter.get("/", async (req, res) => {
   const users = await User.findAll({
     include: {
-<<<<<<< HEAD
       attributes: ["author", "title"],
-=======
->>>>>>> 6fe650eaa05dd9628899e8bd223005cf0075bc20
       model: Blog,
     },
   });
