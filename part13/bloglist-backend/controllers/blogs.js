@@ -1,6 +1,8 @@
 const { Blog } = require("../models/index");
+const User = require("../models/user");
 const express = require("express");
 const blogRouter = express.Router();
+const { Op } = require("sequelize");
 
 // getting middleware
 const {
@@ -9,12 +11,19 @@ const {
   userTokenExtractor,
 } = require("../middleware");
 
-const jwt = require("jsonwebtoken");
-const User = require("../models/user");
-
 // the main get routes
 
-blogRouter.get("/", async (_, res) => {
+blogRouter.get("/", async (req, res) => {
+  // holding the query status
+  let where = {};
+
+  if (req.query.search) {
+    console.log("Searching for", req.query.search);
+    where.title = {
+      [Op.substring]: req.query.search,
+    };
+  }
+
   // getting all blogs
   const blogs = await Blog.findAll({
     attributes: {
@@ -24,6 +33,7 @@ blogRouter.get("/", async (_, res) => {
       attributes: ["name"],
       model: User,
     },
+    where,
   });
   return res.json(blogs);
 });
