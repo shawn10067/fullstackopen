@@ -3,7 +3,11 @@ const express = require("express");
 const blogRouter = express.Router();
 
 // getting middleware
-const { blogFinder, tokenExtractor } = require("../middleware");
+const {
+  blogFinder,
+  tokenExtractor,
+  userTokenExtractor,
+} = require("../middleware");
 
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
@@ -13,7 +17,11 @@ const User = require("../models/user");
 blogRouter.get("/", async (_, res) => {
   // getting all blogs
   const blogs = await Blog.findAll({
+    attributes: {
+      exclude: ["userId"],
+    },
     include: {
+      attributes: ["name"],
       model: User,
     },
   });
@@ -32,12 +40,22 @@ blogRouter.post("/", tokenExtractor, async (req, res) => {
 });
 
 // the ID routes
-blogRouter.delete("/:id", [tokenExtractor, blogFinder], async (req, res) => {
-  if (req.blog) {
-    await req.blog.destroy();
+blogRouter.delete(
+  "/:id",
+  [tokenExtractor, userTokenExtractor, blogFinder],
+  async (req, res) => {
+    if (req.user) {
+      if (req.blog && req.blog.userId === req.user.id) {
+        await req.blog.destroy();
+      } else {
+        console.log("ERROR, ID: ", req.blog.userId, req.user.id);
+        throw new Error("wrong token bud");
+      }
+    }
+
+    return res.sendStatus(204);
   }
-  return res.sendStatus(204);
-});
+);
 
 blogRouter.put("/:id", blogFinder, async (req, res) => {
   if (req.blog && req.body.likes) {

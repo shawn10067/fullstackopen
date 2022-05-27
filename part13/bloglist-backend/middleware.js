@@ -1,7 +1,8 @@
-const Blog = require("./models/blog");
+const { Blog } = require("./models/index");
 const jwt = require("jsonwebtoken");
 
 const { SECRET } = require("./utils/config");
+const { User } = require("./models/index");
 
 // ID helper
 const blogFinder = async (req, res, next) => {
@@ -21,7 +22,28 @@ const tokenExtractor = (req, res, next) => {
   next();
 };
 
+// user id retrival middleware
+const usernameExtractor = async (req, res, next) => {
+  const { username } = req.params;
+  req.user = await User.findOne({
+    where: {
+      username,
+    },
+  });
+  next();
+};
+
+// user token retrival middleware
+const userTokenExtractor = async (req, res, next) => {
+  if (req.decodedToken) {
+    req.user = await User.findByPk(req.decodedToken.id);
+  }
+  next();
+};
+
 module.exports = {
   tokenExtractor,
   blogFinder,
+  usernameExtractor,
+  userTokenExtractor,
 };

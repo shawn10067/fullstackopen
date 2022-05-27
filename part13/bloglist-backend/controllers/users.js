@@ -1,11 +1,17 @@
-const User = require("../models/user");
+const { User } = require("../models/index");
 const express = require("express");
-const Blog = require("../models/blog");
+const { Blog } = require("../models/index");
 const userRouter = express.Router();
+const { usernameExtractor } = require("../middleware");
 
 // main user retrival
 userRouter.get("/", async (req, res) => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    include: {
+      attributes: ["author", "title"],
+      model: Blog,
+    },
+  });
   res.status(200).json(users);
 });
 
@@ -14,19 +20,8 @@ userRouter.post("/", async (req, res) => {
   res.status(201).json(newUser);
 });
 
-// user id retrival middleware
-const userExtractor = async (req, res, next) => {
-  const { username } = req.params;
-  req.user = await User.findOne({
-    where: {
-      username,
-    },
-  });
-  next();
-};
-
 // id specific actions
-userRouter.put("/:username", userExtractor, async (req, res) => {
+userRouter.put("/:username", usernameExtractor, async (req, res) => {
   if (req.user && req.body.username) {
     const { user } = req;
     user.username = req.body.username;
