@@ -5,11 +5,7 @@ const userRouter = express.Router();
 
 // main user retrival
 userRouter.get("/", async (req, res) => {
-  const users = await User.findAll({
-    include: {
-      model: Blog,
-    },
-  });
+  const users = await User.findAll();
   res.status(200).json(users);
 });
 
