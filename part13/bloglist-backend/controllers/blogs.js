@@ -18,9 +18,13 @@ blogRouter.get("/", async (req, res) => {
   let where = {};
 
   if (req.query.search) {
+    where[Op.or] = {};
     console.log("Searching for", req.query.search);
-    where.title = {
-      [Op.substring]: req.query.search,
+    where[Op.or].title = {
+      [Op.iLike]: "%" + req.query.search + "%",
+    };
+    where[Op.or].author = {
+      [Op.iLike]: "%" + req.query.search + "%",
     };
   }
 
@@ -33,6 +37,7 @@ blogRouter.get("/", async (req, res) => {
       attributes: ["name"],
       model: User,
     },
+    order: [["likes", "DESC"]],
     where,
   });
   return res.json(blogs);
