@@ -43,15 +43,17 @@ blogRouter.get("/", async (req, res) => {
   return res.json(blogs);
 });
 
-blogRouter.post("/", tokenExtractor, async (req, res) => {
-  const user = await User.findByPk(req.decodedToken.id);
+blogRouter.post("/", [tokenExtractor, userTokenExtractor], async (req, res) => {
   // getting the blog
-  console.log(user.id, req.body);
-  const blog = await Blog.create({
-    ...req.body,
-    userId: user.id,
-  });
-  return res.json(blog);
+  if (req.user) {
+    const blog = await Blog.create({
+      ...req.body,
+      userId: req.user.id,
+    });
+    return res.json(blog);
+  } else {
+    throw new Error("Login first.");
+  }
 });
 
 // the ID routes

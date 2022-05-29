@@ -7,6 +7,8 @@ const userRouter = require("./controllers/users");
 const authorRouter = require("./controllers/authors");
 const { PORT } = require("./utils/config");
 const { connectToDatabase } = require("./utils/db");
+const { Umzug, SequelizeStorage } = require("umzug");
+const { sequelize } = require("./utils/db");
 
 // main use blocks
 app.use(express.json());
@@ -23,8 +25,32 @@ const errorHandler = (error, _, response, next) => {
 };
 app.use(errorHandler);
 
+// migration run
+const runMigrations = async () => {
+  const migrator = new Umzug({
+    migrations: {
+      glob: "./migrations/*.js",
+    },
+    storage: new SequelizeStorage({ sequelize, tableName: "migrations" }),
+    context: sequelize.getQueryInterface(),
+    logger: console,
+  });
+
+  const migrations = await migrator.up();
+  console.log("Migrations up to date", {
+    files: migrations.map((mig) => mig.name),
+  });
+};
+
 const start = async () => {
-  await connectToDatabase();
+  try {
+    await connectToDatabase();
+    await runMigrations();
+  } catch (error) {
+    console.log("failed to connect to the database");
+    console.log(err);
+    return process.exit(1);
+  }
   app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
   });
