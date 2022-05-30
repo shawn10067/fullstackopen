@@ -22,6 +22,14 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    createdAt: {
+      type: "TIMESTAMP",
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: "TIMESTAMP",
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,

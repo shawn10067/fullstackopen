@@ -48,7 +48,7 @@ const start = async () => {
     await runMigrations();
   } catch (error) {
     console.log("failed to connect to the database");
-    console.log(err);
+    console.log(error);
     return process.exit(1);
   }
   app.listen(PORT, () => {

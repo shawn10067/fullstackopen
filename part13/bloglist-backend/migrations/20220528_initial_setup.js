@@ -1,7 +1,4 @@
 const { DataTypes } = require("sequelize");
-const { sequelize } = require("../utils/db");
-
-//const queryInterface = sequelize.getQueryInterface();
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -29,11 +26,11 @@ module.exports = {
           defaultValue: 0,
         },
         created_at: {
-          type: DataTypes.TIME,
+          type: "TIMESTAMP",
           defaultValue: DataTypes.NOW,
         },
         updated_at: {
-          type: DataTypes.TIME,
+          type: "TIMESTAMP",
           defaultValue: DataTypes.NOW,
         },
       },
@@ -62,11 +59,11 @@ module.exports = {
           allowNull: false,
         },
         created_at: {
-          type: DataTypes.TIME,
+          type: "TIMESTAMP",
           defaultValue: DataTypes.NOW,
         },
         updated_at: {
-          type: DataTypes.TIME,
+          type: "TIMESTAMP",
           defaultValue: DataTypes.NOW,
         },
       },

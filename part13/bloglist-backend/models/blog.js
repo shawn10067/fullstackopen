@@ -25,11 +25,25 @@ Blog.init(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    createdAt: {
+      type: "TIMESTAMP",
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: "TIMESTAMP",
+      defaultValue: DataTypes.NOW,
+    },
+    year: {
+      type: DataTypes.INTEGER,
+      validate: {
+        min: 1991,
+        max: 2022,
+      },
+    },
   },
   {
     sequelize,
     underscored: true,
-    timestamps: false,
     modelName: "blog",
   }
 );

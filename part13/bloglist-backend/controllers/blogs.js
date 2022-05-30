@@ -81,7 +81,7 @@ blogRouter.put("/:id", blogFinder, async (req, res) => {
     await blog.save();
     return res.status(200).json({ blog });
   } else {
-    throw new Error("Incorrect id");
+    throw new Error("Incorrect format");
   }
 });
 
