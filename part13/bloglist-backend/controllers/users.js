@@ -20,6 +20,12 @@ userRouter.get("/", async (req, res) => {
 // getting a specific user
 userRouter.get("/:id", async (req, res) => {
   const { id } = req.params;
+  const where = {};
+
+  if (req.query && req.query.read) {
+    where.read = req.query.read;
+  }
+  console.log(where);
   const user = await User.findOne({
     where: {
       id,
@@ -27,14 +33,15 @@ userRouter.get("/:id", async (req, res) => {
     include: [
       {
         model: Blog,
-        attributes: ["author", "title", "url", "likes"],
+        attributes: ["author", "title", "url", "likes", "id"],
       },
       {
         model: Blog,
         as: "read_blogs",
-        attributes: ["author", "title", "url", "likes"],
+        attributes: ["author", "title", "url", "likes", "id"],
         through: {
           attributes: ["read", "id"],
+          where,
         },
       },
     ],
