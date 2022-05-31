@@ -12,24 +12,43 @@ userRouter.get("/", async (req, res) => {
         model: Blog,
         attributes: ["author", "title"],
       },
-      {
-        model: Blog,
-        as: "read_blogs",
-        attributes: { exclude: ["userId"] },
-        through: {
-          attributes: [],
-        },
-      },
     ],
   });
   res.status(200).json(users);
 });
 
+// getting a specific user
+userRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findOne({
+    where: {
+      id,
+    },
+    include: [
+      {
+        model: Blog,
+        attributes: ["author", "title", "url", "likes"],
+      },
+      {
+        model: Blog,
+        as: "read_blogs",
+        attributes: ["author", "title", "url", "likes"],
+        through: {
+          attributes: ["read", "id"],
+        },
+      },
+    ],
+  });
+  res.status(201).json(user);
+});
+
+// creating a user
 userRouter.post("/", async (req, res) => {
   const newUser = await User.create(req.body);
   res.status(201).json(newUser);
 });
 
+/*
 // id specific actions
 userRouter.put("/:username", usernameExtractor, async (req, res) => {
   if (req.user && req.body.username) {
@@ -41,5 +60,6 @@ userRouter.put("/:username", usernameExtractor, async (req, res) => {
     res.sendStatus(204);
   }
 });
+*/
 
 module.exports = userRouter;
