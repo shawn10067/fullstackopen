@@ -19,4 +19,24 @@ readingRouter.post("/", async (req, res) => {
   return res.sendStatus(400);
 });
 
+// the main put route
+readingRouter.put(
+  "/:id",
+  [tokenExtractor, userTokenExtractor],
+  async (req, res) => {
+    const { user } = req;
+    const userId = user.id;
+    const blogId = req.params;
+    const chosenRead = await ReadingList.findOne({
+      where: {
+        userId,
+        blogId,
+      },
+    });
+    chosenRead.read = req.body.read;
+    await chosenRead.save();
+    res.status(202).json(chosenRead);
+  }
+);
+
 module.exports = readingRouter;
