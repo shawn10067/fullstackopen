@@ -7,10 +7,20 @@ const { usernameExtractor } = require("../middleware");
 // main user retrival
 userRouter.get("/", async (req, res) => {
   const users = await User.findAll({
-    include: {
-      attributes: ["author", "title"],
-      model: Blog,
-    },
+    include: [
+      {
+        model: Blog,
+        attributes: ["author", "title"],
+      },
+      {
+        model: Blog,
+        as: "read_blogs",
+        attributes: { exclude: ["userId"] },
+        through: {
+          attributes: [],
+        },
+      },
+    ],
   });
   res.status(200).json(users);
 });
