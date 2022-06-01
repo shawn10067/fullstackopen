@@ -7,6 +7,7 @@ const {
   blogFinder,
   tokenExtractor,
   userTokenExtractor,
+  tokenVerify,
 } = require("../middleware");
 
 // the main post route
@@ -30,7 +31,7 @@ readingRouter.post("/", async (req, res) => {
 // the main put route
 readingRouter.put(
   "/:id",
-  [tokenExtractor, userTokenExtractor],
+  [tokenExtractor, tokenVerify, userTokenExtractor],
   async (req, res) => {
     const { user } = req;
     const userId = user.id;

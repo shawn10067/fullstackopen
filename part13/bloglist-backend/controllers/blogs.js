@@ -9,6 +9,7 @@ const {
   blogFinder,
   tokenExtractor,
   userTokenExtractor,
+  tokenVerify,
 } = require("../middleware");
 
 // the main get routes
@@ -43,23 +44,27 @@ blogRouter.get("/", async (req, res) => {
   return res.json(blogs);
 });
 
-blogRouter.post("/", [tokenExtractor, userTokenExtractor], async (req, res) => {
-  // getting the blog
-  if (req.user) {
-    const blog = await Blog.create({
-      ...req.body,
-      userId: req.user.id,
-    });
-    return res.json(blog);
-  } else {
-    throw new Error("Login first.");
+blogRouter.post(
+  "/",
+  [tokenExtractor, tokenVerify, userTokenExtractor],
+  async (req, res) => {
+    // getting the blog
+    if (req.user) {
+      const blog = await Blog.create({
+        ...req.body,
+        userId: req.user.id,
+      });
+      return res.json(blog);
+    } else {
+      throw new Error("Login first.");
+    }
   }
-});
+);
 
 // the ID routes
 blogRouter.delete(
   "/:id",
-  [tokenExtractor, userTokenExtractor, blogFinder],
+  [tokenExtractor, tokenVerify, userTokenExtractor, blogFinder],
   async (req, res) => {
     if (req.user) {
       if (req.blog && req.blog.userId === req.user.id) {

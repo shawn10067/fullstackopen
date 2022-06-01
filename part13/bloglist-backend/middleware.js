@@ -1,4 +1,4 @@
-const { Blog } = require("./models/index");
+const { Blog, Session } = require("./models/index");
 const jwt = require("jsonwebtoken");
 
 const { SECRET } = require("./utils/config");
@@ -16,8 +16,22 @@ const tokenExtractor = (req, res, next) => {
   const authorization = req.get("authorization");
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     req.decodedToken = jwt.verify(authorization.substring(7), SECRET);
+    req.rawToken = authorization.substring(7);
   } else {
     throw new Error("Malformatted/Incorrect token.");
+  }
+  next();
+};
+
+// token verification
+const tokenVerify = async (req, res, next) => {
+  const { decodedToken, rawToken } = req;
+  const userId = decodedToken.id;
+  const sessionToken = await Session.findByPk(userId);
+  if (sessionToken && sessionToken.token !== rawToken) {
+    throw new Error("Expired token");
+  } else if (!sessionToken) {
+    throw new Error("Login please");
   }
   next();
 };
@@ -46,4 +60,5 @@ module.exports = {
   blogFinder,
   usernameExtractor,
   userTokenExtractor,
+  tokenVerify,
 };
