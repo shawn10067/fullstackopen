@@ -10,6 +10,7 @@ const { connectToDatabase } = require("./utils/db");
 const { Umzug, SequelizeStorage } = require("umzug");
 const { sequelize } = require("./utils/db");
 const readingRouter = require("./controllers/readingList");
+const logoutRouter = require("./controllers/logout");
 
 // main use blocks
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use("/users", userRouter);
 app.use("/login", loginRouter);
 app.use("/authors", authorRouter);
 app.use("/readingLists", readingRouter);
+app.use("/logout", logoutRouter);
 
 // error router
 const errorHandler = (error, _, response, next) => {

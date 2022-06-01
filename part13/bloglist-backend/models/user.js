@@ -30,6 +30,11 @@ User.init(
       type: "TIMESTAMP",
       defaultValue: DataTypes.NOW,
     },
+    disabled: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
   },
   {
     sequelize,
